@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { StatsOverview } from '@/components/dashboard/StatsOverview';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
+import { Search, Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -42,19 +41,15 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="space-y-8">
           <StatsOverview />
           
           <div className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-white">Popular Subscriptions</h2>
-              <Button
-                variant="outline"
-                className="bg-white/10 border-purple-400/50 hover:bg-white/20 text-white"
-              >
+              <button className="bg-white/10 border-purple-400/50 hover:bg-white/20 text-white px-4 py-2 rounded-xl">
                 View All
-              </Button>
+              </button>
             </div>
             <PopularSubscriptions />
           </div>
