@@ -6,4 +6,8 @@ export interface Subscription {
   nextBillingDate: Date;
   category: string;
   notes?: string;
+  reminders: {
+    fortyEightHour: boolean;
+    twentyFourHour: boolean;
+  };
 }

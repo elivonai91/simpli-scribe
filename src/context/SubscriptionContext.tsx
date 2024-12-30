@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Subscription } from '../types/subscription';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import { scheduleSubscriptionReminders } from '@/utils/notifications';
 
 interface SubscriptionContextType {
   subscriptions: Subscription[];
   addSubscription: (subscription: Omit<Subscription, 'id'>) => void;
   removeSubscription: (id: string) => void;
+  updateSubscription: (subscription: Subscription) => void;
   totalMonthlyCost: number;
 }
 
@@ -19,10 +21,15 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
     const stored = localStorage.getItem('subscriptions');
     if (stored) {
       const parsed = JSON.parse(stored);
-      setSubscriptions(parsed.map((sub: any) => ({
+      const loadedSubscriptions = parsed.map((sub: any) => ({
         ...sub,
-        nextBillingDate: new Date(sub.nextBillingDate)
-      })));
+        nextBillingDate: new Date(sub.nextBillingDate),
+        reminders: sub.reminders || { fortyEightHour: false, twentyFourHour: false }
+      }));
+      setSubscriptions(loadedSubscriptions);
+      
+      // Schedule reminders for all loaded subscriptions
+      loadedSubscriptions.forEach(scheduleSubscriptionReminders);
     }
   }, []);
 
@@ -33,13 +40,23 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
   const addSubscription = (subscription: Omit<Subscription, 'id'>) => {
     const newSub = {
       ...subscription,
-      id: crypto.randomUUID()
+      id: crypto.randomUUID(),
+      reminders: { fortyEightHour: false, twentyFourHour: false }
     };
     setSubscriptions(prev => [...prev, newSub]);
     toast({
       title: "Subscription Added",
       description: `${subscription.name} has been added to your subscriptions.`
     });
+  };
+
+  const updateSubscription = (updatedSubscription: Subscription) => {
+    setSubscriptions(prev => 
+      prev.map(sub => 
+        sub.id === updatedSubscription.id ? updatedSubscription : sub
+      )
+    );
+    scheduleSubscriptionReminders(updatedSubscription);
   };
 
   const removeSubscription = (id: string) => {
@@ -60,6 +77,7 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
       subscriptions,
       addSubscription,
       removeSubscription,
+      updateSubscription,
       totalMonthlyCost
     }}>
       {children}
