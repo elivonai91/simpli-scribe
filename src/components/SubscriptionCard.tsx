@@ -6,6 +6,7 @@ import { Trash2, Bell } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { requestNotificationPermission } from '@/utils/notifications';
 import { toast } from '@/hooks/use-toast';
+import { ManageSubscriptionDialog } from './ManageSubscriptionDialog';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -51,14 +52,17 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lg font-bold">{subscription.name}</CardTitle>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => removeSubscription(subscription.id)}
-          className="text-destructive hover:text-destructive/90"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <ManageSubscriptionDialog subscription={subscription} />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => removeSubscription(subscription.id)}
+            className="text-destructive hover:text-destructive/90"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid gap-1">
