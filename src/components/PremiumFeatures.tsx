@@ -10,12 +10,13 @@ export const PremiumFeatures = () => {
   const session = useSession();
 
   const { data: isPremium } = useQuery({
-    queryKey: ['premiumStatus'],
+    queryKey: ['premiumStatus', session?.user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('premium_subscriptions')
         .select('is_active')
-        .single();
+        .eq('user_id', session?.user?.id)
+        .maybeSingle();
       return data?.is_active || false;
     },
     enabled: !!session?.user
