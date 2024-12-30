@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Star, TrendingUp } from 'lucide-react';
+import { Plus, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from '@/hooks/use-toast';
@@ -41,29 +41,41 @@ const popularServices = [
 
 export const PopularSubscriptions = () => {
   const [logos, setLogos] = useState<Record<string, string>>({});
+  const [loadingLogos, setLoadingLogos] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
 
   useEffect(() => {
     const loadLogos = async () => {
       for (const service of popularServices) {
         try {
-          // Check if logo exists in database
-          const { data: existingLogo } = await supabase
+          setLoadingLogos(prev => ({ ...prev, [service.name]: true }));
+          
+          // Check if logo exists in database using maybeSingle() instead of single()
+          const { data: existingLogo, error: queryError } = await supabase
             .from('subscription_logos')
             .select('logo_path')
             .eq('service_name', service.name)
-            .single();
+            .maybeSingle();
+
+          if (queryError) {
+            throw queryError;
+          }
 
           if (existingLogo) {
             setLogos(prev => ({ ...prev, [service.name]: existingLogo.logo_path }));
           } else {
+            console.log(`Generating logo for ${service.name}...`);
             // Generate new logo
-            const response = await supabase.functions.invoke('generate-logo', {
+            const { data, error } = await supabase.functions.invoke('generate-logo', {
               body: { serviceName: service.name }
             });
 
-            if (response.data?.logo_path) {
-              setLogos(prev => ({ ...prev, [service.name]: response.data.logo_path }));
+            if (error) {
+              throw error;
+            }
+
+            if (data?.logo_path) {
+              setLogos(prev => ({ ...prev, [service.name]: data.logo_path }));
             }
           }
         } catch (error) {
@@ -73,6 +85,8 @@ export const PopularSubscriptions = () => {
             description: `Could not load logo for ${service.name}`,
             variant: "destructive"
           });
+        } finally {
+          setLoadingLogos(prev => ({ ...prev, [service.name]: false }));
         }
       }
     };
@@ -92,14 +106,18 @@ export const PopularSubscriptions = () => {
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4">
-              {logos[service.name] ? (
+              {loadingLogos[service.name] ? (
+                <div className="w-16 h-16 rounded-xl bg-white/20 animate-pulse" />
+              ) : logos[service.name] ? (
                 <img 
                   src={logos[service.name]} 
                   alt={`${service.name} logo`}
                   className="w-16 h-16 rounded-xl object-cover"
                 />
               ) : (
-                <div className="w-16 h-16 rounded-xl bg-white/20 animate-pulse" />
+                <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-white/50">
+                  {service.name[0]}
+                </div>
               )}
               <div>
                 <h3 className="text-xl font-semibold text-white">{service.name}</h3>

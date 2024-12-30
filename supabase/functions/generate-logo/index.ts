@@ -1,6 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,11 +23,16 @@ serve(async (req) => {
     );
 
     // Check if logo already exists
-    const { data: existingLogo } = await supabase
+    const { data: existingLogo, error: queryError } = await supabase
       .from('subscription_logos')
       .select('logo_path')
       .eq('service_name', serviceName)
-      .single();
+      .maybeSingle();
+
+    if (queryError) {
+      console.error('Error checking existing logo:', queryError);
+      throw queryError;
+    }
 
     if (existingLogo) {
       console.log('Logo already exists:', existingLogo);
@@ -37,6 +42,7 @@ serve(async (req) => {
       );
     }
 
+    console.log('Generating new logo with OpenAI...');
     // Generate logo using OpenAI
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
@@ -54,15 +60,24 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', errorData);
+      throw new Error(`OpenAI API error: ${response.status} ${errorData}`);
+    }
+
     const imageData = await response.json();
-    console.log('OpenAI response:', imageData);
+    console.log('OpenAI response received');
 
     if (!imageData.data?.[0]?.url) {
-      throw new Error('Failed to generate image');
+      throw new Error('Failed to generate image: No URL in response');
     }
 
     // Download the image
     const imageResponse = await fetch(imageData.data[0].url);
+    if (!imageResponse.ok) {
+      throw new Error('Failed to download generated image');
+    }
     const imageBlob = await imageResponse.blob();
 
     // Upload to Supabase Storage
@@ -75,6 +90,7 @@ serve(async (req) => {
       });
 
     if (uploadError) {
+      console.error('Storage upload error:', uploadError);
       throw uploadError;
     }
 
@@ -92,6 +108,7 @@ serve(async (req) => {
       });
 
     if (dbError) {
+      console.error('Database insert error:', dbError);
       throw dbError;
     }
 
