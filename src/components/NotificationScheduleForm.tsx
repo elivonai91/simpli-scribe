@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useSession } from '@supabase/auth-helpers-react';
 
 interface NotificationScheduleFormProps {
   subscriptionId: string;
@@ -22,14 +23,25 @@ interface FormData {
 export const NotificationScheduleForm = ({ subscriptionId, onScheduleAdded }: NotificationScheduleFormProps) => {
   const { register, handleSubmit, reset } = useForm<FormData>();
   const { toast } = useToast();
+  const session = useSession();
 
   const onSubmit = async (data: FormData) => {
+    if (!session?.user?.id) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to create notification schedules.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase.from('notification_schedules').insert({
         subscription_id: subscriptionId,
         days_before: data.daysBefore,
         notification_time: data.notificationTime,
-        enabled: data.enabled
+        enabled: data.enabled,
+        user_id: session.user.id
       });
 
       if (error) throw error;
