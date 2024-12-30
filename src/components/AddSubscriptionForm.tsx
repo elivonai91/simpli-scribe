@@ -17,7 +17,7 @@ interface FormData {
 }
 
 export const AddSubscriptionForm = () => {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset, setValue } = useForm<FormData>();
   const { addSubscription } = useSubscriptions();
 
   const onSubmit = (data: FormData) => {
@@ -31,6 +31,11 @@ export const AddSubscriptionForm = () => {
       }
     });
     reset();
+  };
+
+  // Handle select change manually since we're using a controlled select
+  const handleBillingCycleChange = (value: string) => {
+    setValue('billingCycle', value as 'monthly' | 'yearly');
   };
 
   return (
@@ -58,7 +63,7 @@ export const AddSubscriptionForm = () => {
 
           <div className="space-y-2">
             <Label htmlFor="billingCycle">Billing Cycle</Label>
-            <Select {...register('billingCycle')}>
+            <Select onValueChange={handleBillingCycleChange} defaultValue="monthly">
               <SelectTrigger>
                 <SelectValue placeholder="Select billing cycle" />
               </SelectTrigger>
