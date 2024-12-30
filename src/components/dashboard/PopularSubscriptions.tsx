@@ -62,12 +62,14 @@ export const PopularSubscriptions = () => {
             return {
               ...service,
               logoPath,
+              features: service.features || [], // Ensure features is always an array
             };
           } catch (error) {
             console.error('Error fetching logo:', error);
             return {
               ...service,
               logoPath: null,
+              features: service.features || [], // Ensure features is always an array
             };
           }
         })

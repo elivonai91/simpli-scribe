@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 interface Subscription {
   name: string;
   description: string;
-  features: string[];
+  features?: string[]; // Make features optional
   logoPath: string | null;
 }
 
@@ -52,14 +52,16 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
               >
                 <h3 className="text-xl font-bold text-white mb-2">{subscription.name}</h3>
                 <p className="text-sm text-white/80 mb-4">{subscription.description}</p>
-                <ul className="text-sm text-white/70 space-y-1">
-                  {subscription.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mr-2" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                {subscription.features && subscription.features.length > 0 && (
+                  <ul className="text-sm text-white/70 space-y-1">
+                    {subscription.features.map((feature, index) => (
+                      <li key={index} className="flex items-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
