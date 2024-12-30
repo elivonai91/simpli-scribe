@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { StatsOverview } from '@/components/dashboard/StatsOverview';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
-import { Search, Plus } from 'lucide-react';
+import { SearchBar } from '@/components/SearchBar';
+import { Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Index = () => {
@@ -12,17 +13,10 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Main Content Area */}
       <div className="ml-72 p-8">
-        {/* Top Bar */}
         <div className="flex justify-between items-center mb-8">
-          <div className="backdrop-blur-xl bg-white/10 rounded-2xl flex items-center px-6 py-3 w-96">
-            <Search className="w-5 h-5 text-white/50" />
-            <input
-              type="text"
-              placeholder="Search subscriptions..."
-              className="ml-4 bg-transparent text-white outline-none w-full placeholder-white/50"
-            />
+          <div className="w-full max-w-3xl">
+            <SearchBar />
           </div>
           
           <div className="flex items-center space-x-6">
@@ -42,17 +36,21 @@ const Index = () => {
         </div>
 
         <div className="space-y-8">
-          <StatsOverview />
+          {activeTab === 'overview' && <StatsOverview />}
           
-          <div className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-white">Popular Subscriptions</h2>
-              <button className="bg-white/10 border-purple-400/50 hover:bg-white/20 text-white px-4 py-2 rounded-xl">
-                View All
-              </button>
+          {(activeTab === 'overview' || activeTab === 'trending') && (
+            <div className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-white">
+                  {activeTab === 'trending' ? 'Trending Subscriptions' : 'Popular Subscriptions'}
+                </h2>
+                <button className="bg-white/10 border-purple-400/50 hover:bg-white/20 text-white px-4 py-2 rounded-xl">
+                  View All
+                </button>
+              </div>
+              <PopularSubscriptions />
             </div>
-            <PopularSubscriptions />
-          </div>
+          )}
         </div>
       </div>
     </div>
