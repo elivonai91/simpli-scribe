@@ -20,14 +20,25 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Welcome to SubsCrypt</CardTitle>
+          <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
         </CardHeader>
         <CardContent>
           <Auth
             supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            theme="light"
+            appearance={{ 
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: '#2563eb',
+                    brandAccent: '#1d4ed8',
+                  },
+                },
+              },
+            }}
             providers={[]}
+            redirectTo={window.location.origin}
+            onlyThirdPartyProviders={false}
           />
         </CardContent>
       </Card>
