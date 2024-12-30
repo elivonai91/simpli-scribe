@@ -5,64 +5,64 @@
 @layer base {
   :root {
     --background: 220 15% 12%;
-    --foreground: 47 95% 55%;
+    --foreground: 270 95% 75%;
 
     --card: 220 15% 16%;
-    --card-foreground: 47 95% 55%;
+    --card-foreground: 270 95% 75%;
 
     --popover: 220 15% 16%;
-    --popover-foreground: 47 95% 55%;
+    --popover-foreground: 270 95% 75%;
 
-    --primary: 47 95% 55%;
+    --primary: 270 95% 75%;
     --primary-foreground: 220 15% 12%;
 
     --secondary: 220 15% 20%;
-    --secondary-foreground: 47 95% 55%;
+    --secondary-foreground: 270 95% 75%;
 
     --muted: 220 15% 20%;
     --muted-foreground: 220 15% 65%;
 
-    --accent: 47 95% 55%;
+    --accent: 270 95% 75%;
     --accent-foreground: 220 15% 12%;
 
     --destructive: 0 62% 30%;
-    --destructive-foreground: 47 95% 55%;
+    --destructive-foreground: 270 95% 75%;
 
     --border: 220 15% 20%;
     --input: 220 15% 20%;
-    --ring: 47 95% 55%;
+    --ring: 270 95% 75%;
 
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 220 15% 12%;
-    --foreground: 47 95% 55%;
+    --foreground: 270 95% 75%;
 
     --card: 220 15% 16%;
-    --card-foreground: 47 95% 55%;
+    --card-foreground: 270 95% 75%;
 
     --popover: 220 15% 16%;
-    --popover-foreground: 47 95% 55%;
+    --popover-foreground: 270 95% 75%;
 
-    --primary: 47 95% 55%;
+    --primary: 270 95% 75%;
     --primary-foreground: 220 15% 12%;
 
     --secondary: 220 15% 20%;
-    --secondary-foreground: 47 95% 55%;
+    --secondary-foreground: 270 95% 75%;
 
     --muted: 220 15% 20%;
     --muted-foreground: 220 15% 65%;
 
-    --accent: 47 95% 55%;
+    --accent: 270 95% 75%;
     --accent-foreground: 220 15% 12%;
 
     --destructive: 0 62% 30%;
-    --destructive-foreground: 47 95% 55%;
+    --destructive-foreground: 270 95% 75%;
 
     --border: 220 15% 20%;
     --input: 220 15% 20%;
-    --ring: 47 95% 55%;
+    --ring: 270 95% 75%;
   }
 }
 
@@ -76,33 +76,15 @@
   }
 }
 
-/* Egyptian-inspired gradients */
-.gradient-gold {
-  @apply bg-gradient-to-r from-[#FFD700] to-[#FDB931] text-charcoal-900;
+/* Modern gradient styles */
+.gradient-purple {
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white;
 }
 
-.gradient-sapphire {
-  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
-}
-
-.gradient-ruby {
-  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
-}
-
-.gradient-emerald {
-  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
+.gradient-glass {
+  @apply backdrop-blur-xl bg-white/10 border-white/10;
 }
 
 .card-hover {
   @apply transition-transform duration-300 hover:scale-105;
-}
-
-.hieroglyph-border {
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(255, 215, 0, 0.1) 10px,
-    rgba(255, 215, 0, 0.1) 20px
-  );
 }
