@@ -1,171 +1,108 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from '@/hooks/use-toast';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/components/ui/use-toast';
 
-interface ServiceLogo {
-  service_name: string;
+interface SubscriptionLogo {
   logo_path: string;
 }
 
-const popularServices = [
-  {
-    name: 'Netflix',
-    category: 'Entertainment',
-    price: 19.99,
-    description: 'Stream your favorite shows and movies',
-    trending: true
-  },
-  {
-    name: 'Spotify',
-    category: 'Music',
-    price: 9.99,
-    description: 'Music streaming with personalized playlists'
-  },
-  {
-    name: 'Notion',
-    category: 'Productivity',
-    price: 8,
-    description: 'All-in-one workspace for notes and collaboration',
-    trending: true
-  },
-  {
-    name: 'Adobe CC',
-    category: 'Creative',
-    price: 52.99,
-    description: 'Professional creative tools suite'
-  }
-];
+const popularServices = ['Netflix', 'Spotify', 'Notion'];
 
 export const PopularSubscriptions = () => {
-  const [logos, setLogos] = useState<Record<string, string>>({});
-  const [loadingLogos, setLoadingLogos] = useState<Record<string, boolean>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const { toast } = useToast();
 
-  useEffect(() => {
-    const loadLogos = async () => {
-      for (const service of popularServices) {
-        try {
-          setLoadingLogos(prev => ({ ...prev, [service.name]: true }));
-          setErrors(prev => ({ ...prev, [service.name]: '' }));
-          
-          const { data: existingLogo, error: queryError } = await supabase
-            .from('subscription_logos')
-            .select('logo_path')
-            .eq('service_name', service.name)
-            .maybeSingle();
+  const fetchLogo = async (serviceName: string) => {
+    // Try to fetch existing logo first
+    const { data: existingLogo, error: fetchError } = await supabase
+      .from('subscription_logos')
+      .select('logo_path')
+      .eq('service_name', serviceName)
+      .maybeSingle();
 
-          if (queryError) {
-            console.error(`Error querying logo for ${service.name}:`, queryError);
-            throw queryError;
-          }
+    if (fetchError) {
+      console.error('Error fetching logo:', fetchError);
+      return null;
+    }
 
-          if (existingLogo?.logo_path) {
-            setLogos(prev => ({ ...prev, [service.name]: existingLogo.logo_path }));
-          } else {
-            console.log(`Generating logo for ${service.name}...`);
-            const { data, error } = await supabase.functions.invoke('generate-logo', {
-              body: { serviceName: service.name }
-            });
+    if (existingLogo) {
+      return existingLogo.logo_path;
+    }
 
-            if (error) {
-              console.error(`Error generating logo for ${service.name}:`, error);
-              throw error;
-            }
+    // If no logo exists, try to generate one
+    try {
+      const { data: generatedLogo, error: generateError } = await supabase.functions.invoke('generate-logo', {
+        body: { serviceName },
+      });
 
-            if (data?.logo_path) {
-              setLogos(prev => ({ ...prev, [service.name]: data.logo_path }));
-            } else {
-              throw new Error('No logo path returned from generation');
-            }
-          }
-        } catch (error) {
-          console.error(`Error handling logo for ${service.name}:`, error);
-          setErrors(prev => ({ 
-            ...prev, 
-            [service.name]: error instanceof Error ? error.message : 'Failed to load logo'
-          }));
-          toast({
-            title: "Error with logo",
-            description: `Could not load logo for ${service.name}`,
-            variant: "destructive"
-          });
-        } finally {
-          setLoadingLogos(prev => ({ ...prev, [service.name]: false }));
-        }
+      if (generateError) {
+        throw generateError;
       }
-    };
 
-    loadLogos();
-  }, [toast]);
+      return generatedLogo?.logo_path;
+    } catch (error) {
+      console.error('Error generating logo:', error);
+      toast({
+        title: "Couldn't generate logo",
+        description: "Using fallback display",
+        variant: "destructive",
+      });
+      return null;
+    }
+  };
+
+  const { data: subscriptions, isLoading } = useQuery({
+    queryKey: ['popularSubscriptions'],
+    queryFn: async () => {
+      const results = await Promise.all(
+        popularServices.map(async (service) => {
+          const logoPath = await fetchLogo(service);
+          return {
+            name: service,
+            logoPath,
+          };
+        })
+      );
+      return results;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-32 rounded-xl" />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {popularServices.map((service, index) => (
-        <motion.div
-          key={service.name}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className="group relative backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10 hover:bg-white/20 transition-all duration-300"
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {subscriptions?.map((subscription) => (
+        <div
+          key={subscription.name}
+          className="bg-white/5 p-6 rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              {loadingLogos[service.name] ? (
-                <div className="w-16 h-16 rounded-xl bg-white/20 animate-pulse" />
-              ) : logos[service.name] ? (
-                <img 
-                  src={logos[service.name]} 
-                  alt={`${service.name} logo`}
-                  className="w-16 h-16 rounded-xl object-cover"
-                  onError={() => {
-                    setErrors(prev => ({ 
-                      ...prev, 
-                      [service.name]: 'Failed to load image' 
-                    }));
-                    setLogos(prev => {
-                      const newLogos = { ...prev };
-                      delete newLogos[service.name];
-                      return newLogos;
-                    });
-                  }}
-                />
-              ) : (
-                <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-white/50">
-                  {errors[service.name] ? '!' : service.name[0]}
-                </div>
-              )}
-              <div>
-                <h3 className="text-xl font-semibold text-white">{service.name}</h3>
-                <p className="text-purple-200/70">{service.category}</p>
-              </div>
-            </div>
-            {service.trending && (
-              <div className="flex items-center px-3 py-1 rounded-full bg-pink-500/20 text-pink-300">
-                <TrendingUp className="w-4 h-4 mr-1" />
-                Trending
+          <div className="flex items-center space-x-4">
+            {subscription.logoPath ? (
+              <img
+                src={subscription.logoPath}
+                alt={`${subscription.name} logo`}
+                className="w-12 h-12 rounded-lg object-cover"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                {subscription.name[0]}
               </div>
             )}
+            <div>
+              <h3 className="text-lg font-semibold text-white">{subscription.name}</h3>
+              <p className="text-sm text-white/60">Popular subscription</p>
+            </div>
           </div>
-          
-          <p className="text-white/70 mb-4">{service.description}</p>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-              ${service.price}/mo
-            </span>
-            <Button
-              variant="outline"
-              className="bg-white/10 border-purple-400/50 hover:bg-white/20 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Subscription
-            </Button>
-          </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );
