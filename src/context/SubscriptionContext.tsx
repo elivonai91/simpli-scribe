@@ -2,9 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Subscription } from '../types/subscription';
 import { useToast } from '@/hooks/use-toast';
 import { scheduleSubscriptionReminders } from '@/utils/notifications';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import CryptoJS from 'crypto-js';
 
-// Encryption key - in a real production app, this would come from a secure source
 const STORAGE_KEY = 'subscriptions';
 const ENCRYPTION_KEY = 'lovable-subscription-manager-2024';
 
@@ -21,13 +21,13 @@ const SubscriptionContext = createContext<SubscriptionContextType | undefined>(u
 export const SubscriptionProvider = ({ children }: { children: React.ReactNode }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const { toast } = useToast();
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
-  // Encrypt data before storing
   const encryptData = (data: any): string => {
     return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
   };
 
-  // Decrypt data after retrieving
   const decryptData = (encryptedData: string): any => {
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
@@ -40,36 +40,39 @@ export const SubscriptionProvider = ({ children }: { children: React.ReactNode }
   };
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const decryptedData = decryptData(stored);
-        if (decryptedData) {
-          const loadedSubscriptions = decryptedData.map((sub: any) => ({
-            ...sub,
-            nextBillingDate: new Date(sub.nextBillingDate),
-            reminders: sub.reminders || { fortyEightHour: false, twentyFourHour: false }
-          }));
-          setSubscriptions(loadedSubscriptions);
-          
-          // Schedule reminders for all loaded subscriptions
-          loadedSubscriptions.forEach(scheduleSubscriptionReminders);
+    if (session?.user) {
+      const stored = localStorage.getItem(`${STORAGE_KEY}-${session.user.id}`);
+      if (stored) {
+        try {
+          const decryptedData = decryptData(stored);
+          if (decryptedData) {
+            const loadedSubscriptions = decryptedData.map((sub: any) => ({
+              ...sub,
+              nextBillingDate: new Date(sub.nextBillingDate),
+              reminders: sub.reminders || { fortyEightHour: false, twentyFourHour: false }
+            }));
+            setSubscriptions(loadedSubscriptions);
+            
+            loadedSubscriptions.forEach(scheduleSubscriptionReminders);
+          }
+        } catch (error) {
+          console.error('Error loading subscriptions:', error);
+          toast({
+            title: "Error Loading Data",
+            description: "There was an error loading your subscription data.",
+            variant: "destructive"
+          });
         }
-      } catch (error) {
-        console.error('Error loading subscriptions:', error);
-        toast({
-          title: "Error Loading Data",
-          description: "There was an error loading your subscription data.",
-          variant: "destructive"
-        });
       }
     }
-  }, []);
+  }, [session]);
 
   useEffect(() => {
-    const encryptedData = encryptData(subscriptions);
-    localStorage.setItem(STORAGE_KEY, encryptedData);
-  }, [subscriptions]);
+    if (session?.user) {
+      const encryptedData = encryptData(subscriptions);
+      localStorage.setItem(`${STORAGE_KEY}-${session.user.id}`, encryptedData);
+    }
+  }, [subscriptions, session]);
 
   const addSubscription = (subscription: Omit<Subscription, 'id'>) => {
     const newSub = {
