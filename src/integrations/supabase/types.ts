@@ -207,6 +207,27 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_logos: {
+        Row: {
+          created_at: string | null
+          id: string
+          logo_path: string
+          service_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          logo_path: string
+          service_name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          logo_path?: string
+          service_name?: string
+        }
+        Relationships: []
+      }
       usage_analytics: {
         Row: {
           action_details: Json | null
