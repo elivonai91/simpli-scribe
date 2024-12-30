@@ -8,6 +8,7 @@ import { NotificationScheduleForm } from './NotificationScheduleForm';
 import { NotificationScheduleList } from './NotificationScheduleList';
 import { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { motion } from 'framer-motion';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -56,105 +57,110 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-bold">{subscription.name}</CardTitle>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1">
-            {subscription.billingCycle === 'monthly' && (
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <Card className="backdrop-blur-xl bg-white/10 border-white/10">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-lg font-bold text-gold-400">{subscription.name}</CardTitle>
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1">
+              {subscription.billingCycle === 'monthly' && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleQuickUpgrade}
+                  className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
+                  title="Upgrade to yearly"
+                >
+                  <Check className="h-4 w-4 text-emerald-400" />
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="icon"
-                onClick={handleQuickUpgrade}
-                className="h-8 w-8"
-                title="Upgrade to yearly"
+                onClick={handleQuickRenewal}
+                className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
+                title="Renew subscription"
               >
-                <Check className="h-4 w-4 text-green-500" />
+                <RefreshCw className="h-4 w-4 text-gold-400" />
               </Button>
-            )}
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleQuickCancel}
+                className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
+                title="Cancel subscription"
+              >
+                <X className="h-4 w-4 text-ruby-400" />
+              </Button>
+            </div>
+            <ManageSubscriptionDialog subscription={subscription} />
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              onClick={handleQuickRenewal}
-              className="h-8 w-8"
-              title="Renew subscription"
+              onClick={() => removeSubscription(subscription.id)}
+              className="text-ruby-400 hover:text-ruby-400/90 hover:bg-white/10 h-8 w-8"
             >
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleQuickCancel}
-              className="h-8 w-8"
-              title="Cancel subscription"
-            >
-              <X className="h-4 w-4 text-red-500" />
+              <Trash2 className="h-4 w-4" />
             </Button>
           </div>
-          <ManageSubscriptionDialog subscription={subscription} />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => removeSubscription(subscription.id)}
-            className="text-destructive hover:text-destructive/90 h-8 w-8"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-1">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Cost:</span>
-              <span className="font-medium">
-                ${subscription.cost.toFixed(2)} / {subscription.billingCycle}
-              </span>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid gap-1">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gold-400/70">Cost:</span>
+                <span className="font-medium text-gold-400">
+                  ${subscription.cost.toFixed(2)} / {subscription.billingCycle}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gold-400/70">Category:</span>
+                <span className="font-medium text-gold-400">{subscription.category}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gold-400/70">Next billing:</span>
+                <span className="font-medium text-gold-400">
+                  {subscription.nextBillingDate.toLocaleDateString()}
+                </span>
+              </div>
+              {subscription.notes && (
+                <div className="mt-2 text-sm text-gold-400/70">
+                  Note: {subscription.notes}
+                </div>
+              )}
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Category:</span>
-              <span className="font-medium">{subscription.category}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Next billing:</span>
-              <span className="font-medium">
-                {subscription.nextBillingDate.toLocaleDateString()}
-              </span>
-            </div>
-            {subscription.notes && (
-              <div className="mt-2 text-sm text-muted-foreground">
-                Note: {subscription.notes}
+
+            <NotificationScheduleList subscriptionId={subscription.id} />
+            
+            {!showScheduleForm ? (
+              <Button 
+                variant="outline" 
+                onClick={() => setShowScheduleForm(true)}
+                className="w-full border-white/10 bg-white/10 hover:bg-white/20 text-gold-400"
+              >
+                Add Notification Schedule
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                <NotificationScheduleForm 
+                  subscriptionId={subscription.id}
+                  onScheduleAdded={() => setShowScheduleForm(false)}
+                />
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setShowScheduleForm(false)}
+                  className="w-full text-gold-400 hover:bg-white/10"
+                >
+                  Cancel
+                </Button>
               </div>
             )}
           </div>
-
-          <NotificationScheduleList subscriptionId={subscription.id} />
-          
-          {!showScheduleForm ? (
-            <Button 
-              variant="outline" 
-              onClick={() => setShowScheduleForm(true)}
-              className="w-full"
-            >
-              Add Notification Schedule
-            </Button>
-          ) : (
-            <div className="space-y-4">
-              <NotificationScheduleForm 
-                subscriptionId={subscription.id}
-                onScheduleAdded={() => setShowScheduleForm(false)}
-              />
-              <Button 
-                variant="ghost" 
-                onClick={() => setShowScheduleForm(false)}
-                className="w-full"
-              >
-                Cancel
-              </Button>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };

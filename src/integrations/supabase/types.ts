@@ -63,6 +63,39 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_services: {
+        Row: {
+          affiliate_rate: number | null
+          api_integration: boolean | null
+          base_price: number
+          category: string | null
+          created_at: string | null
+          id: string
+          premium_discount: number | null
+          service_name: string
+        }
+        Insert: {
+          affiliate_rate?: number | null
+          api_integration?: boolean | null
+          base_price: number
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          premium_discount?: number | null
+          service_name: string
+        }
+        Update: {
+          affiliate_rate?: number | null
+          api_integration?: boolean | null
+          base_price?: number
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          premium_discount?: number | null
+          service_name?: string
+        }
+        Relationships: []
+      }
       premium_subscriptions: {
         Row: {
           created_at: string
@@ -94,19 +127,122 @@ export type Database = {
         Row: {
           created_at: string
           email: string | null
+          full_name: string | null
           id: string
+          notification_preferences: Json | null
+          plan_type: string | null
+          stripe_customer_id: string | null
         }
         Insert: {
           created_at?: string
           email?: string | null
+          full_name?: string | null
           id: string
+          notification_preferences?: Json | null
+          plan_type?: string | null
+          stripe_customer_id?: string | null
         }
         Update: {
           created_at?: string
           email?: string | null
+          full_name?: string | null
           id?: string
+          notification_preferences?: Json | null
+          plan_type?: string | null
+          stripe_customer_id?: string | null
         }
         Relationships: []
+      }
+      usage_analytics: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_subscriptions: {
+        Row: {
+          billing_amount: number
+          billing_currency: string | null
+          billing_cycle: string | null
+          created_at: string | null
+          id: string
+          last_billing_date: string | null
+          next_billing_date: string
+          notes: string | null
+          payment_method_id: string | null
+          service_category: string | null
+          service_name: string
+          status: string | null
+          subscription_url: string | null
+          user_id: string | null
+        }
+        Insert: {
+          billing_amount: number
+          billing_currency?: string | null
+          billing_cycle?: string | null
+          created_at?: string | null
+          id?: string
+          last_billing_date?: string | null
+          next_billing_date: string
+          notes?: string | null
+          payment_method_id?: string | null
+          service_category?: string | null
+          service_name: string
+          status?: string | null
+          subscription_url?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          billing_amount?: number
+          billing_currency?: string | null
+          billing_cycle?: string | null
+          created_at?: string | null
+          id?: string
+          last_billing_date?: string | null
+          next_billing_date?: string
+          notes?: string | null
+          payment_method_id?: string | null
+          service_category?: string | null
+          service_name?: string
+          status?: string | null
+          subscription_url?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
