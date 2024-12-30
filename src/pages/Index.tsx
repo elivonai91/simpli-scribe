@@ -6,7 +6,7 @@ import { SubscriptionProvider } from '@/context/SubscriptionContext';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Grid2X2, List, Search } from 'lucide-react';
+import { Grid2X2, List, Search, Pyramid } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { SpendingInsights } from '@/components/SpendingInsights';
 import { BudgetForm } from '@/components/BudgetForm';
@@ -51,9 +51,14 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <Tabs defaultValue="subscriptions" className="space-y-8">
-          <TabsList>
-            <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-            <TabsTrigger value="insights">Insights & Budget</TabsTrigger>
+          <TabsList className="w-full justify-start bg-secondary border border-accent/20">
+            <TabsTrigger value="subscriptions" className="data-[state=active]:gradient-gold data-[state=active]:text-primary-foreground">
+              <Pyramid className="mr-2 h-4 w-4" />
+              Subscriptions
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="data-[state=active]:gradient-gold data-[state=active]:text-primary-foreground">
+              Insights & Budget
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="subscriptions">
@@ -64,15 +69,18 @@ const Dashboard = () => {
               </div>
               
               <div className="w-full md:w-2/3 space-y-6">
-                <Card className="bg-brand-500 text-white">
+                <Card className="gradient-gold text-primary-foreground hieroglyph-border">
                   <CardHeader>
-                    <CardTitle>Monthly Overview</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <Pyramid className="h-6 w-6" />
+                      Monthly Overview
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold">
+                    <div className="text-4xl font-bold">
                       ${totalMonthlyCost.toFixed(2)}
                     </div>
-                    <p className="text-brand-100">Total Monthly Cost</p>
+                    <p className="text-primary-foreground/80">Total Monthly Cost</p>
                   </CardContent>
                 </Card>
 
@@ -84,11 +92,11 @@ const Dashboard = () => {
                         placeholder="Search subscriptions..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9"
+                        className="pl-9 bg-secondary border-accent/20"
                       />
                     </div>
                     <Select value={sortBy} onValueChange={setSortBy}>
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-[180px] bg-secondary border-accent/20">
                         <SelectValue placeholder="Sort by" />
                       </SelectTrigger>
                       <SelectContent>
@@ -98,7 +106,7 @@ const Dashboard = () => {
                       </SelectContent>
                     </Select>
                     <Select value={filterCategory} onValueChange={setFilterCategory}>
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-[180px] bg-secondary border-accent/20">
                         <SelectValue placeholder="Filter category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -114,6 +122,7 @@ const Dashboard = () => {
                         variant={viewMode === 'grid' ? 'default' : 'outline'}
                         size="icon"
                         onClick={() => setViewMode('grid')}
+                        className="border-accent/20"
                       >
                         <Grid2X2 className="h-4 w-4" />
                       </Button>
@@ -121,6 +130,7 @@ const Dashboard = () => {
                         variant={viewMode === 'list' ? 'default' : 'outline'}
                         size="icon"
                         onClick={() => setViewMode('list')}
+                        className="border-accent/20"
                       >
                         <List className="h-4 w-4" />
                       </Button>
