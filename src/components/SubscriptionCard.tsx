@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { useSubscriptions } from '@/context/SubscriptionContext';
 import { Trash2 } from 'lucide-react';
 import { ManageSubscriptionDialog } from './ManageSubscriptionDialog';
-import { SubscriptionReminders } from './SubscriptionReminders';
+import { NotificationScheduleForm } from './NotificationScheduleForm';
+import { NotificationScheduleList } from './NotificationScheduleList';
+import { useState } from 'react';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -12,6 +14,7 @@ interface SubscriptionCardProps {
 
 export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
   const { removeSubscription } = useSubscriptions();
+  const [showScheduleForm, setShowScheduleForm] = useState(false);
 
   return (
     <Card className="w-full">
@@ -30,29 +33,56 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-1">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Cost:</span>
-            <span className="font-medium">
-              ${subscription.cost.toFixed(2)} / {subscription.billingCycle}
-            </span>
+        <div className="grid gap-4">
+          <div className="grid gap-1">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Cost:</span>
+              <span className="font-medium">
+                ${subscription.cost.toFixed(2)} / {subscription.billingCycle}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Category:</span>
+              <span className="font-medium">{subscription.category}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Next billing:</span>
+              <span className="font-medium">
+                {subscription.nextBillingDate.toLocaleDateString()}
+              </span>
+            </div>
+            {subscription.notes && (
+              <div className="mt-2 text-sm text-muted-foreground">
+                Note: {subscription.notes}
+              </div>
+            )}
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Category:</span>
-            <span className="font-medium">{subscription.category}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Next billing:</span>
-            <span className="font-medium">
-              {subscription.nextBillingDate.toLocaleDateString()}
-            </span>
-          </div>
-          {subscription.notes && (
-            <div className="mt-2 text-sm text-muted-foreground">
-              Note: {subscription.notes}
+
+          <NotificationScheduleList subscriptionId={subscription.id} />
+          
+          {!showScheduleForm ? (
+            <Button 
+              variant="outline" 
+              onClick={() => setShowScheduleForm(true)}
+              className="w-full"
+            >
+              Add Notification Schedule
+            </Button>
+          ) : (
+            <div className="space-y-4">
+              <NotificationScheduleForm 
+                subscriptionId={subscription.id}
+                onScheduleAdded={() => setShowScheduleForm(false)}
+              />
+              <Button 
+                variant="ghost" 
+                onClick={() => setShowScheduleForm(false)}
+                className="w-full"
+              >
+                Cancel
+              </Button>
             </div>
           )}
-          <SubscriptionReminders subscription={subscription} />
         </div>
       </CardContent>
     </Card>
