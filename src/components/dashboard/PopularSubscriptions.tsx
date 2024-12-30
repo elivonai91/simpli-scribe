@@ -42,6 +42,7 @@ const popularServices = [
 export const PopularSubscriptions = () => {
   const [logos, setLogos] = useState<Record<string, string>>({});
   const [loadingLogos, setLoadingLogos] = useState<Record<string, boolean>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -49,8 +50,8 @@ export const PopularSubscriptions = () => {
       for (const service of popularServices) {
         try {
           setLoadingLogos(prev => ({ ...prev, [service.name]: true }));
+          setErrors(prev => ({ ...prev, [service.name]: '' }));
           
-          // Check if logo exists in database using maybeSingle() instead of single()
           const { data: existingLogo, error: queryError } = await supabase
             .from('subscription_logos')
             .select('logo_path')
@@ -58,30 +59,37 @@ export const PopularSubscriptions = () => {
             .maybeSingle();
 
           if (queryError) {
+            console.error(`Error querying logo for ${service.name}:`, queryError);
             throw queryError;
           }
 
-          if (existingLogo) {
+          if (existingLogo?.logo_path) {
             setLogos(prev => ({ ...prev, [service.name]: existingLogo.logo_path }));
           } else {
             console.log(`Generating logo for ${service.name}...`);
-            // Generate new logo
             const { data, error } = await supabase.functions.invoke('generate-logo', {
               body: { serviceName: service.name }
             });
 
             if (error) {
+              console.error(`Error generating logo for ${service.name}:`, error);
               throw error;
             }
 
             if (data?.logo_path) {
               setLogos(prev => ({ ...prev, [service.name]: data.logo_path }));
+            } else {
+              throw new Error('No logo path returned from generation');
             }
           }
         } catch (error) {
-          console.error(`Error loading logo for ${service.name}:`, error);
+          console.error(`Error handling logo for ${service.name}:`, error);
+          setErrors(prev => ({ 
+            ...prev, 
+            [service.name]: error instanceof Error ? error.message : 'Failed to load logo'
+          }));
           toast({
-            title: "Error loading logo",
+            title: "Error with logo",
             description: `Could not load logo for ${service.name}`,
             variant: "destructive"
           });
@@ -113,10 +121,21 @@ export const PopularSubscriptions = () => {
                   src={logos[service.name]} 
                   alt={`${service.name} logo`}
                   className="w-16 h-16 rounded-xl object-cover"
+                  onError={() => {
+                    setErrors(prev => ({ 
+                      ...prev, 
+                      [service.name]: 'Failed to load image' 
+                    }));
+                    setLogos(prev => {
+                      const newLogos = { ...prev };
+                      delete newLogos[service.name];
+                      return newLogos;
+                    });
+                  }}
                 />
               ) : (
                 <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center text-white/50">
-                  {service.name[0]}
+                  {errors[service.name] ? '!' : service.name[0]}
                 </div>
               )}
               <div>
