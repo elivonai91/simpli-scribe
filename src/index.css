@@ -4,64 +4,64 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
+    --background: 220 15% 12%;
     --foreground: 47 95% 55%;
 
-    --card: 222.2 84% 6.9%;
+    --card: 220 15% 16%;
     --card-foreground: 47 95% 55%;
 
-    --popover: 222.2 84% 6.9%;
+    --popover: 220 15% 16%;
     --popover-foreground: 47 95% 55%;
 
     --primary: 47 95% 55%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary-foreground: 220 15% 12%;
 
-    --secondary: 217.2 32.6% 12%;
+    --secondary: 220 15% 20%;
     --secondary-foreground: 47 95% 55%;
 
-    --muted: 217.2 32.6% 12%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 217.2 32.6% 12%;
-    --accent-foreground: 47 95% 55%;
+    --accent: 47 95% 55%;
+    --accent-foreground: 220 15% 12%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 30%;
     --destructive-foreground: 47 95% 55%;
 
-    --border: 217.2 32.6% 12%;
-    --input: 217.2 32.6% 12%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
     --ring: 47 95% 55%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 220 15% 12%;
     --foreground: 47 95% 55%;
 
-    --card: 222.2 84% 6.9%;
+    --card: 220 15% 16%;
     --card-foreground: 47 95% 55%;
 
-    --popover: 222.2 84% 6.9%;
+    --popover: 220 15% 16%;
     --popover-foreground: 47 95% 55%;
 
     --primary: 47 95% 55%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary-foreground: 220 15% 12%;
 
-    --secondary: 217.2 32.6% 12%;
+    --secondary: 220 15% 20%;
     --secondary-foreground: 47 95% 55%;
 
-    --muted: 217.2 32.6% 12%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 217.2 32.6% 12%;
-    --accent-foreground: 47 95% 55%;
+    --accent: 47 95% 55%;
+    --accent-foreground: 220 15% 12%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 30%;
     --destructive-foreground: 47 95% 55%;
 
-    --border: 217.2 32.6% 12%;
-    --input: 217.2 32.6% 12%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
     --ring: 47 95% 55%;
   }
 }
@@ -78,19 +78,19 @@
 
 /* Egyptian-inspired gradients */
 .gradient-gold {
-  @apply bg-gradient-to-r from-gold-400 to-gold-600 text-charcoal-900;
+  @apply bg-gradient-to-r from-[#FFD700] to-[#FDB931] text-charcoal-900;
 }
 
 .gradient-sapphire {
-  @apply bg-gradient-to-r from-sapphire-600 to-sapphire-800 text-gold-400;
+  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
 }
 
 .gradient-ruby {
-  @apply bg-gradient-to-r from-ruby-600 to-ruby-800 text-gold-400;
+  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
 }
 
 .gradient-emerald {
-  @apply bg-gradient-to-r from-emerald-600 to-emerald-800 text-gold-400;
+  @apply bg-gradient-to-r from-charcoal-700 to-charcoal-800 text-gold-400;
 }
 
 .card-hover {
@@ -102,7 +102,7 @@
     45deg,
     transparent,
     transparent 10px,
-    rgba(245, 158, 11, 0.1) 10px,
-    rgba(245, 158, 11, 0.1) 20px
+    rgba(255, 215, 0, 0.1) 10px,
+    rgba(255, 215, 0, 0.1) 20px
   );
 }
