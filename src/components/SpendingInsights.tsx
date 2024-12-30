@@ -16,7 +16,8 @@ export const SpendingInsights = () => {
       const { data, error } = await supabase
         .from('budgets')
         .select('*')
-        .single();
+        .eq('user_id', session?.user?.id)
+        .maybeSingle();
 
       if (error) throw error;
       return data;
