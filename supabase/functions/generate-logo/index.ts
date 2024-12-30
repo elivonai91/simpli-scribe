@@ -7,12 +7,14 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
     const { serviceName } = await req.json()
+    console.log('Generating logo for service:', serviceName)
 
     // Generate a logo using DALL-E
     const response = await fetch('https://api.openai.com/v1/images/generations', {
@@ -23,7 +25,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "dall-e-3",
-        prompt: `Create a modern, minimalist logo for ${serviceName}. The logo should be professional, memorable, and work well at different sizes. Use a clean design with simple shapes and limited colors. The logo should reflect the brand's identity but be abstract enough to be unique.`,
+        prompt: `Create a simple, minimalist, professional logo for ${serviceName}. The logo should be clean, modern, and work well at different sizes. Use a simple color palette and avoid text.`,
         n: 1,
         size: "1024x1024",
         quality: "standard",
@@ -31,14 +33,25 @@ serve(async (req) => {
       }),
     })
 
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('DALL-E API error:', error)
+      throw new Error(`DALL-E API error: ${error}`)
+    }
+
     const data = await response.json()
-    
+    console.log('DALL-E response:', JSON.stringify(data))
+
     if (!data.data?.[0]?.url) {
+      console.error('No image URL in DALL-E response:', data)
       throw new Error('No image URL received from DALL-E')
     }
 
     // Download the image
     const imageResponse = await fetch(data.data[0].url)
+    if (!imageResponse.ok) {
+      throw new Error('Failed to download generated image')
+    }
     const imageBlob = await imageResponse.blob()
 
     // Upload to Supabase Storage
@@ -48,6 +61,8 @@ serve(async (req) => {
     )
 
     const fileName = `${serviceName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`
+    console.log('Uploading to storage with filename:', fileName)
+
     const { data: uploadData, error: uploadError } = await supabase
       .storage
       .from('subscription_logos')
@@ -57,13 +72,18 @@ serve(async (req) => {
         upsert: false
       })
 
-    if (uploadError) throw uploadError
+    if (uploadError) {
+      console.error('Storage upload error:', uploadError)
+      throw uploadError
+    }
 
     // Get the public URL
     const { data: { publicUrl } } = supabase
       .storage
       .from('subscription_logos')
       .getPublicUrl(fileName)
+
+    console.log('Successfully generated and uploaded logo:', publicUrl)
 
     return new Response(
       JSON.stringify({
@@ -75,9 +95,12 @@ serve(async (req) => {
       },
     )
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in generate-logo function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.toString()
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
