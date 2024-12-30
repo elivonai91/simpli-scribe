@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      budgets: {
+        Row: {
+          category_limits: Json | null
+          created_at: string
+          id: string
+          monthly_limit: number
+          user_id: string
+        }
+        Insert: {
+          category_limits?: Json | null
+          created_at?: string
+          id?: string
+          monthly_limit: number
+          user_id: string
+        }
+        Update: {
+          category_limits?: Json | null
+          created_at?: string
+          id?: string
+          monthly_limit?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_schedules: {
         Row: {
           created_at: string
