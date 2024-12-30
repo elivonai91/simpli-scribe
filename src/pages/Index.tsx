@@ -11,6 +11,7 @@ import { useState, useMemo } from 'react';
 import { SpendingInsights } from '@/components/SpendingInsights';
 import { BudgetForm } from '@/components/BudgetForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PremiumFeatures } from '@/components/PremiumFeatures';
 
 const Dashboard = () => {
   const { subscriptions, totalMonthlyCost } = useSubscriptions();
@@ -57,8 +58,9 @@ const Dashboard = () => {
 
           <TabsContent value="subscriptions">
             <div className="flex flex-col md:flex-row gap-8">
-              <div className="w-full md:w-1/3">
+              <div className="w-full md:w-1/3 space-y-6">
                 <AddSubscriptionForm />
+                <PremiumFeatures />
               </div>
               
               <div className="w-full md:w-2/3 space-y-6">
