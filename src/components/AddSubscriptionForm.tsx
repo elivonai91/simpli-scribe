@@ -24,7 +24,11 @@ export const AddSubscriptionForm = () => {
     addSubscription({
       ...data,
       cost: Number(data.cost),
-      nextBillingDate: new Date(data.nextBillingDate)
+      nextBillingDate: new Date(data.nextBillingDate),
+      reminders: {
+        fortyEightHour: false,
+        twentyFourHour: false
+      }
     });
     reset();
   };

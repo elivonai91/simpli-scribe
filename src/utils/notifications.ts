@@ -1,3 +1,5 @@
+import { Subscription } from '@/types/subscription';
+
 export const requestNotificationPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
