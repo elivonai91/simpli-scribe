@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, CreditCard, List, TrendingUp, Search, Atom, Settings, User } from 'lucide-react';
+import { PieChart, CreditCard, List, TrendingUp, Search, Atom, Settings, User, BarChart } from 'lucide-react';
 import { SidebarMenuItem } from './sidebar/SidebarMenuItem';
 import { SidebarHeader } from './sidebar/SidebarHeader';
 
@@ -11,7 +11,8 @@ interface SidebarProps {
 export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: PieChart },
-    { id: 'my-subscription', label: 'My SubsCryption', icon: User },
+    { id: 'account', label: 'Account', icon: User },
+    { id: 'analytics', label: 'Analytics', icon: BarChart },
     { id: 'subscriptions', label: 'Subscriptions', icon: CreditCard },
     { id: 'features', label: 'Features', icon: List },
     { id: 'trending', label: 'Trending Subscriptions', icon: TrendingUp },

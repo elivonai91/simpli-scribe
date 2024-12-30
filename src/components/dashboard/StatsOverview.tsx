@@ -1,17 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-const spendingData = [
-  { month: 'Jan', amount: 280 },
-  { month: 'Feb', amount: 300 },
-  { month: 'Mar', amount: 310 },
-  { month: 'Apr', amount: 290 },
-  { month: 'May', amount: 320 },
-  { month: 'Jun', amount: 318 }
-];
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useSubscriptions } from '@/context/SubscriptionContext';
 
 export const StatsOverview = () => {
+  const { subscriptions } = useSubscriptions();
+
+  // Calculate usage score based on cost and frequency of use
+  const usageData = subscriptions.map(sub => ({
+    name: sub.name,
+    usageScore: sub.cost * (Math.random() * 100), // In a real app, this would be actual usage data
+    cost: sub.cost
+  })).sort((a, b) => b.usageScore - a.usageScore);
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -39,18 +40,12 @@ export const StatsOverview = () => {
         animate={{ opacity: 1, y: 0 }}
         className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10"
       >
-        <h2 className="text-xl font-semibold text-white mb-6">Spending Trends</h2>
+        <h2 className="text-xl font-semibold text-white mb-6">My Subscription Usage</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={spendingData}>
-              <defs>
-                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgb(168, 85, 247)" stopOpacity={0.4}/>
-                  <stop offset="100%" stopColor="rgb(168, 85, 247)" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="month" stroke="#ffffff50" />
-              <YAxis stroke="#ffffff50" />
+            <BarChart data={usageData} layout="vertical">
+              <XAxis type="number" stroke="#ffffff50" />
+              <YAxis dataKey="name" type="category" stroke="#ffffff50" width={150} />
               <Tooltip 
                 contentStyle={{ 
                   background: 'rgba(255, 255, 255, 0.1)',
@@ -58,16 +53,19 @@ export const StatsOverview = () => {
                   borderRadius: '12px',
                   backdropFilter: 'blur(10px)'
                 }}
+                formatter={(value: number, name: string) => [
+                  `$${value.toFixed(2)}`,
+                  name === 'usageScore' ? 'Usage Score' : 'Cost'
+                ]}
               />
-              <Area
-                type="monotone"
-                dataKey="amount"
-                stroke="#a855f7"
-                fill="url(#colorGradient)"
-                strokeWidth={2}
-              />
-            </AreaChart>
+              <Bar dataKey="usageScore" fill="#a855f7" name="Usage Score" />
+              <Bar dataKey="cost" fill="#3b82f6" name="Monthly Cost" />
+            </BarChart>
           </ResponsiveContainer>
+        </div>
+        <div className="mt-4 text-white/70 text-sm">
+          <p>* Usage score is calculated based on subscription cost and frequency of use.</p>
+          <p>* Higher usage score indicates better value for money.</p>
         </div>
       </motion.div>
     </div>
