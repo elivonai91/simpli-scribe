@@ -69,11 +69,16 @@ export const PopularSubscriptions = () => {
         popularServices.map(async (service) => {
           try {
             // First check if we already have a logo stored
-            const { data: existingLogo } = await supabase
+            const { data: existingLogo, error: fetchError } = await supabase
               .from('subscription_logos')
               .select('logo_path')
               .eq('service_name', service.name)
               .maybeSingle();
+
+            if (fetchError) {
+              console.error('Error fetching logo:', fetchError);
+              throw fetchError;
+            }
 
             if (existingLogo?.logo_path) {
               return {
@@ -88,20 +93,36 @@ export const PopularSubscriptions = () => {
               body: { serviceName: service.name }
             });
 
-            if (generateError) throw generateError;
-
-            // Store the generated logo path
-            if (generatedLogo?.logo_path) {
-              await supabase
-                .from('subscription_logos')
-                .insert({ service_name: service.name, logo_path: generatedLogo.logo_path });
+            if (generateError) {
+              console.error('Error generating logo:', generateError);
+              throw generateError;
             }
 
-            return {
-              ...service,
-              logoPath: generatedLogo?.logo_path || null,
-              features: service.features || []
-            };
+            // Store the generated logo path, handle potential duplicates
+            if (generatedLogo?.logo_path) {
+              const { error: insertError } = await supabase
+                .from('subscription_logos')
+                .upsert({ 
+                  service_name: service.name, 
+                  logo_path: generatedLogo.logo_path 
+                }, {
+                  onConflict: 'service_name',
+                  ignoreDuplicates: true
+                });
+
+              if (insertError) {
+                console.error('Error storing logo:', insertError);
+                // Don't throw here, we still have the generated logo
+              }
+
+              return {
+                ...service,
+                logoPath: generatedLogo.logo_path,
+                features: service.features || []
+              };
+            }
+
+            throw new Error('No logo path received');
           } catch (error) {
             console.error('Error handling logo for', service.name, ':', error);
             toast({
@@ -119,6 +140,8 @@ export const PopularSubscriptions = () => {
       );
       return results;
     },
+    retry: 2,
+    retryDelay: 1000,
   });
 
   if (isLoading) {
