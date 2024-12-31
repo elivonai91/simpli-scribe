@@ -146,7 +146,7 @@ export const PopularSubscriptions = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-32 rounded-xl" />
         ))}
@@ -160,7 +160,7 @@ export const PopularSubscriptions = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="w-full h-[400px] relative"
+        className="w-full h-full relative"
       >
         <SubscriptionCarousel subscriptions={subscriptions || []} />
       </motion.div>
