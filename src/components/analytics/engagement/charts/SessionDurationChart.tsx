@@ -13,20 +13,35 @@ interface SessionDurationChartProps {
 
 export const SessionDurationChart = ({ sessionMetrics }: SessionDurationChartProps) => {
   return (
-    <Card>
+    <Card className="backdrop-blur-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10">
       <CardHeader>
-        <CardTitle>Session Duration Trends</CardTitle>
+        <CardTitle className="text-white">Session Duration Trends</CardTitle>
       </CardHeader>
       <CardContent className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={sessionMetrics}>
-            <XAxis dataKey="date" />
-            <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
+            <XAxis 
+              dataKey="date" 
+              tick={{ fill: 'rgba(255,255,255,0.8)' }}
+              stroke="rgba(255,255,255,0.2)"
+            />
+            <YAxis 
+              label={{ 
+                value: 'Minutes', 
+                angle: -90, 
+                position: 'insideLeft',
+                style: { fill: 'rgba(255,255,255,0.8)' }
+              }}
+              tick={{ fill: 'rgba(255,255,255,0.8)' }}
+              stroke="rgba(255,255,255,0.2)"
+            />
             <Tooltip 
               contentStyle={{
-                background: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid #ccc',
-                borderRadius: '4px'
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '4px',
+                color: 'white'
               }}
             />
             <Bar dataKey="duration" fill="#9b87f5" name="Duration (minutes)" />

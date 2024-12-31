@@ -46,30 +46,34 @@ export const SpendingTrends = () => {
   });
 
   return (
-    <Card className="col-span-2">
+    <>
       <CardHeader>
-        <CardTitle>Monthly Spending Trends</CardTitle>
+        <CardTitle className="text-white">Monthly Spending Trends</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
           {!isLoading && trendData && (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis 
                   dataKey="month"
-                  tick={{ fill: '#888888' }}
+                  tick={{ fill: 'rgba(255,255,255,0.8)' }}
+                  stroke="rgba(255,255,255,0.2)"
                 />
                 <YAxis 
-                  tick={{ fill: '#888888' }}
+                  tick={{ fill: 'rgba(255,255,255,0.8)' }}
+                  stroke="rgba(255,255,255,0.2)"
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Tooltip 
                   formatter={(value: number) => [`$${value}`, 'Spending']}
                   contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px'
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '4px',
+                    color: 'white'
                   }}
                 />
                 <Line 
@@ -84,6 +88,6 @@ export const SpendingTrends = () => {
           )}
         </div>
       </CardContent>
-    </Card>
+    </>
   );
 };

@@ -36,9 +36,9 @@ export const CategoryDistribution = () => {
   });
 
   return (
-    <Card>
+    <>
       <CardHeader>
-        <CardTitle>Category Distribution</CardTitle>
+        <CardTitle className="text-white">Category Distribution</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -62,17 +62,19 @@ export const CategoryDistribution = () => {
                 <Tooltip 
                   formatter={(value: number) => [`$${value}`, 'Monthly Spending']}
                   contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px'
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '4px',
+                    color: 'white'
                   }}
                 />
-                <Legend />
+                <Legend formatter={(value) => <span style={{ color: 'white' }}>{value}</span>} />
               </PieChart>
             </ResponsiveContainer>
           )}
         </div>
       </CardContent>
-    </Card>
+    </>
   );
 };
