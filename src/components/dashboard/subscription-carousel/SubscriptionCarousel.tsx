@@ -16,15 +16,15 @@ interface SubscriptionCarouselProps {
 }
 
 export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProps) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [rotation, setRotation] = useState(0);
   const [isAutoRotating, setIsAutoRotating] = useState(true);
 
   React.useEffect(() => {
     if (!isAutoRotating) return;
 
     const interval = setInterval(() => {
-      // Always rotate forward, wrapping around using modulo
-      setActiveIndex((current) => (current + 1) % subscriptions.length);
+      // Continuously increment rotation
+      setRotation(current => current + (360 / subscriptions.length));
     }, 3000);
 
     return () => clearInterval(interval);
@@ -32,14 +32,12 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
 
   const handleNext = () => {
     setIsAutoRotating(false);
-    setActiveIndex((current) => (current + 1) % subscriptions.length);
+    setRotation(current => current + (360 / subscriptions.length));
   };
 
   const handlePrev = () => {
     setIsAutoRotating(false);
-    // For continuous rotation, we add subscriptions.length before the modulo
-    // to ensure we always get a positive number when going backwards
-    setActiveIndex((current) => (current - 1 + subscriptions.length) % subscriptions.length);
+    setRotation(current => current - (360 / subscriptions.length));
   };
 
   return (
@@ -51,20 +49,23 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
       <div className="relative w-full max-w-4xl h-full perspective-1000">
         <div className="absolute inset-0 flex items-center justify-center transform-style-3d">
           {subscriptions.map((subscription, index) => {
-            // Calculate rotation for continuous movement
-            const rotation = ((index - activeIndex) * (360 / subscriptions.length));
-            const zIndex = index === activeIndex ? 10 : 0;
+            // Calculate each card's rotation based on its index and the current rotation
+            const cardRotation = ((index * (360 / subscriptions.length)) - rotation);
+            
+            // Calculate z-index based on rotation position
+            const normalizedRotation = ((cardRotation % 360) + 360) % 360;
+            const zIndex = normalizedRotation > 90 && normalizedRotation < 270 ? 0 : 10;
 
             return (
               <CarouselCard
                 key={subscription.name}
                 subscription={subscription}
                 style={{
-                  transform: `rotateY(${rotation}deg) translateZ(300px)`,
+                  transform: `rotateY(${cardRotation}deg) translateZ(300px)`,
                   zIndex,
                   transition: 'transform 0.5s ease-out'
                 }}
-                isActive={index === activeIndex}
+                isActive={normalizedRotation >= 315 || normalizedRotation <= 45}
               />
             );
           })}
