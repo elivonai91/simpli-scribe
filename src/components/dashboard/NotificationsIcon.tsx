@@ -46,11 +46,11 @@ export const NotificationsIcon = () => {
   }, [session?.user?.id]);
 
   return (
-    <Button variant="ghost" size="icon" className="relative">
+    <Button variant="ghost" size="icon" className="relative w-[60px] h-[60px]">
       {hasNotifications ? (
-        <BellDot className="h-15 w-15 text-ruby-500" />
+        <BellDot className="h-15 w-15 text-ruby-500" strokeWidth={1.5} />
       ) : (
-        <Bell className="h-15 w-15 text-ruby-500" />
+        <Bell className="h-15 w-15 text-ruby-500" strokeWidth={1.5} />
       )}
     </Button>
   );
