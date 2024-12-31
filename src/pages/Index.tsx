@@ -10,6 +10,7 @@ import { SubscriptionProvider } from '@/context/SubscriptionContext';
 import { NavigationMenu } from '@/components/dashboard/NavigationMenu';
 import { NotificationsIcon } from '@/components/dashboard/NotificationsIcon';
 import { NotificationCarousel } from '@/components/dashboard/NotificationCarousel';
+import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -66,6 +67,7 @@ const Index = () => {
             <div className="space-y-8">
               {activeTab === 'overview' && <StatsOverview />}
               {activeTab === 'features' && <Features />}
+              {activeTab === 'analytics' && <AnalyticsDashboard />}
             </div>
           </div>
         </div>
