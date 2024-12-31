@@ -24,7 +24,7 @@ export const StatsOverview = () => {
     return acc;
   }, []);
 
-  const COLORS = ['#a855f7', '#3b82f6', '#ec4899', '#10b981', '#f59e0b'];
+  const COLORS = ['#9b87f5', '#7E69AB', '#D946EF', '#FFDEE2'];
 
   return (
     <div className="space-y-6">
@@ -52,71 +52,75 @@ export const StatsOverview = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10"
+          className="relative overflow-hidden rounded-2xl p-6 before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-500/20 before:to-pink-500/20 before:backdrop-blur-xl"
         >
-          <h2 className="text-xl font-semibold text-white mb-6">Subscription Usage Trends</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={usageData} layout="vertical">
-                <XAxis type="number" stroke="#ffffff50" />
-                <YAxis dataKey="name" type="category" stroke="#ffffff50" width={150} />
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    backdropFilter: 'blur(10px)'
-                  }}
-                  formatter={(value: number, name: string) => [
-                    `$${value.toFixed(2)}`,
-                    name === 'usageScore' ? 'Usage Score' : 'Cost'
-                  ]}
-                />
-                <Bar dataKey="usageScore" fill="#a855f7" name="Usage Score" />
-                <Bar dataKey="cost" fill="#3b82f6" name="Monthly Cost" />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="relative z-10">
+            <h2 className="text-xl font-semibold text-white mb-6">Subscription Usage Trends</h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={usageData} layout="vertical">
+                  <XAxis type="number" stroke="#ffffff50" />
+                  <YAxis dataKey="name" type="category" stroke="#ffffff50" width={150} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      background: 'rgba(155, 135, 245, 0.1)',
+                      border: '1px solid rgba(155, 135, 245, 0.2)',
+                      borderRadius: '12px',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                    formatter={(value: number, name: string) => [
+                      `$${value.toFixed(2)}`,
+                      name === 'usageScore' ? 'Usage Score' : 'Cost'
+                    ]}
+                  />
+                  <Bar dataKey="usageScore" fill="#9b87f5" name="Usage Score" />
+                  <Bar dataKey="cost" fill="#D946EF" name="Monthly Cost" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10"
+          className="relative overflow-hidden rounded-2xl p-6 before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-500/20 before:to-pink-500/20 before:backdrop-blur-xl"
         >
-          <h2 className="text-xl font-semibold text-white mb-6">Category Distribution</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={categoryData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ 
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    backdropFilter: 'blur(10px)',
-                    color: 'white'
-                  }}
-                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Cost']}
-                />
-                <Legend 
-                  formatter={(value) => <span style={{ color: 'white' }}>{value}</span>}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="relative z-10">
+            <h2 className="text-xl font-semibold text-white mb-6">Category Distribution</h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={categoryData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {categoryData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ 
+                      background: 'rgba(155, 135, 245, 0.1)',
+                      border: '1px solid rgba(155, 135, 245, 0.2)',
+                      borderRadius: '12px',
+                      backdropFilter: 'blur(10px)',
+                      color: 'white'
+                    }}
+                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Cost']}
+                  />
+                  <Legend 
+                    formatter={(value) => <span style={{ color: 'white' }}>{value}</span>}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </motion.div>
       </div>
