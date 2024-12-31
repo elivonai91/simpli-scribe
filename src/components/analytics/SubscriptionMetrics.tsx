@@ -31,6 +31,7 @@ export const SubscriptionMetrics = () => {
         totalSubscriptions: subscriptions?.length || 0,
         totalMonthlySpend,
         categoryCount,
+        averageCost: totalMonthlySpend / (subscriptions?.length || 1)
       };
     },
     enabled: !!session?.user
@@ -45,7 +46,7 @@ export const SubscriptionMetrics = () => {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Subscriptions</CardTitle>
@@ -70,6 +71,16 @@ export const SubscriptionMetrics = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics?.categoryCount}</div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Average Cost</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            ${metrics?.averageCost.toFixed(2)}
+          </div>
         </CardContent>
       </Card>
     </div>
