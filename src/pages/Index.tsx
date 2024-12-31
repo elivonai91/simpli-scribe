@@ -11,6 +11,7 @@ import { NavigationMenu } from '@/components/dashboard/NavigationMenu';
 import { NotificationsIcon } from '@/components/dashboard/NotificationsIcon';
 import { NotificationCarousel } from '@/components/dashboard/NotificationCarousel';
 import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard';
+import { SubscriptionsTab } from '@/components/dashboard/SubscriptionsTab';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -68,6 +69,7 @@ const Index = () => {
               {activeTab === 'overview' && <StatsOverview />}
               {activeTab === 'features' && <Features />}
               {activeTab === 'analytics' && <AnalyticsDashboard />}
+              {activeTab === 'subscriptions' && <SubscriptionsTab />}
             </div>
           </div>
         </div>

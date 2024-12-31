@@ -252,6 +252,36 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          monthly_price: number
+          name: string
+          yearly_price: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          monthly_price: number
+          name: string
+          yearly_price: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          monthly_price?: number
+          name?: string
+          yearly_price?: number
+        }
+        Relationships: []
+      }
       usage_analytics: {
         Row: {
           action_details: Json | null
