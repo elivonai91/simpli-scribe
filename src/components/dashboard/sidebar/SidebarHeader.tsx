@@ -3,9 +3,11 @@ import React from 'react';
 export const SidebarHeader = () => {
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-        SimpliScribed
-      </h1>
+      <img 
+        src="/lovable-uploads/d3b26bb3-c118-4fa1-8664-fcdc37d4e460.png" 
+        alt="SimpliScribed Logo" 
+        className="w-48 mx-auto"
+      />
     </div>
   );
 };
