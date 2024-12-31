@@ -23,6 +23,7 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
     if (!isAutoRotating) return;
 
     const interval = setInterval(() => {
+      // Always rotate forward, wrapping around using modulo
       setActiveIndex((current) => (current + 1) % subscriptions.length);
     }, 3000);
 
@@ -36,6 +37,8 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
 
   const handlePrev = () => {
     setIsAutoRotating(false);
+    // For continuous rotation, we add subscriptions.length before the modulo
+    // to ensure we always get a positive number when going backwards
     setActiveIndex((current) => (current - 1 + subscriptions.length) % subscriptions.length);
   };
 
@@ -48,6 +51,7 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
       <div className="relative w-full max-w-4xl h-full perspective-1000">
         <div className="absolute inset-0 flex items-center justify-center transform-style-3d">
           {subscriptions.map((subscription, index) => {
+            // Calculate rotation for continuous movement
             const rotation = ((index - activeIndex) * (360 / subscriptions.length));
             const zIndex = index === activeIndex ? 10 : 0;
 
@@ -58,6 +62,7 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
                 style={{
                   transform: `rotateY(${rotation}deg) translateZ(300px)`,
                   zIndex,
+                  transition: 'transform 0.5s ease-out'
                 }}
                 isActive={index === activeIndex}
               />
