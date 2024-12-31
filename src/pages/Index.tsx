@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { StatsOverview } from '@/components/dashboard/StatsOverview';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
+import Features from '@/components/dashboard/Features';
 import { SearchBar } from '@/components/SearchBar';
 import { Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -39,6 +40,7 @@ const Index = () => {
 
           <div className="space-y-8">
             {activeTab === 'overview' && <StatsOverview />}
+            {activeTab === 'features' && <Features />}
             
             {(activeTab === 'overview' || activeTab === 'trending') && (
               <div className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/10">
