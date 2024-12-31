@@ -9,48 +9,52 @@ const corsHeaders = {
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders })
   }
 
   try {
     const { serviceName } = await req.json()
-    console.log('Generating logo for service:', serviceName)
+    console.log('Fetching logo for service:', serviceName)
 
-    // Generate a logo using DALL-E
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
+    // Use Perplexity to search for the official logo
+    const perplexityResponse = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${Deno.env.get('PERPLEXITY_API_KEY')}`,
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
       },
       body: JSON.stringify({
-        model: "dall-e-3",
-        prompt: `Create a simple, minimalist, professional logo for ${serviceName}. The logo should be clean, modern, and work well at different sizes. Use a simple color palette and avoid text.`,
-        n: 1,
-        size: "1024x1024",
-        quality: "standard",
-        response_format: "url"
+        model: 'llama-3.1-sonar-small-128k-online',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant that finds official company logos. Return ONLY the direct URL to the highest quality, official logo image you can find. The URL must end in .png, .jpg, or .jpeg. Do not include any other text or explanation in your response.'
+          },
+          {
+            role: 'user',
+            content: `Find the official logo URL for ${serviceName}. The URL must be a direct link to the image file.`
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 100,
+        return_images: false
       }),
     })
 
-    if (!response.ok) {
-      const error = await response.text()
-      console.error('DALL-E API error:', error)
-      throw new Error(`DALL-E API error: ${error}`)
+    if (!perplexityResponse.ok) {
+      const error = await perplexityResponse.text()
+      console.error('Perplexity API error:', error)
+      throw new Error(`Perplexity API error: ${error}`)
     }
 
-    const data = await response.json()
-    console.log('DALL-E response:', JSON.stringify(data))
-
-    if (!data.data?.[0]?.url) {
-      console.error('No image URL in DALL-E response:', data)
-      throw new Error('No image URL received from DALL-E')
-    }
+    const data = await perplexityResponse.json()
+    const logoUrl = data.choices[0].message.content.trim()
+    console.log('Found logo URL:', logoUrl)
 
     // Download the image
-    const imageResponse = await fetch(data.data[0].url)
+    const imageResponse = await fetch(logoUrl)
     if (!imageResponse.ok) {
-      throw new Error('Failed to download generated image')
+      throw new Error('Failed to download logo image')
     }
     const imageBlob = await imageResponse.blob()
 
@@ -60,14 +64,14 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const fileName = `${serviceName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`
+    const fileName = `${serviceName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${logoUrl.split('.').pop()}`
     console.log('Uploading to storage with filename:', fileName)
 
     const { data: uploadData, error: uploadError } = await supabase
       .storage
       .from('subscription_logos')
       .upload(fileName, imageBlob, {
-        contentType: 'image/png',
+        contentType: imageResponse.headers.get('content-type') || 'image/png',
         cacheControl: '3600',
         upsert: false
       })
@@ -83,7 +87,7 @@ serve(async (req) => {
       .from('subscription_logos')
       .getPublicUrl(fileName)
 
-    console.log('Successfully generated and uploaded logo:', publicUrl)
+    console.log('Successfully fetched and uploaded logo:', publicUrl)
 
     return new Response(
       JSON.stringify({
