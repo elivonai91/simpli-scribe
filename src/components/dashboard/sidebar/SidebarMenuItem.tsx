@@ -20,7 +20,7 @@ export const SidebarMenuItem = ({ id, label, icon: Icon, isActive, onClick }: Si
       }`}
       onClick={onClick}
     >
-      <Icon className="w-6 h-6 mr-3 text-purple-500" />
+      <Icon className="w-6 h-6 mr-3 text-ruby-500" />
       {label}
     </motion.button>
   );
