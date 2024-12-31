@@ -67,7 +67,7 @@ export const SearchBar = () => {
 
   return (
     <div className="space-y-4">
-      <div className="backdrop-blur-xl bg-white/10 rounded-2xl flex items-center px-6 py-3 w-full">
+      <div className="backdrop-blur-xl bg-white/10 rounded-xl flex items-center px-6 h-[52px] w-full">
         <Search className="w-5 h-5 text-white/50" />
         <input
           type="text"
