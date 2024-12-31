@@ -48,10 +48,13 @@ export const UserEngagementDetails = () => {
       const end = session.session_end ? new Date(session.session_end) : new Date();
       const duration = Math.round((end.getTime() - start.getTime()) / (1000 * 60)); // in minutes
       
+      // Safely handle features_used array
+      const featuresUsed = Array.isArray(session.features_used) ? session.features_used.length : 0;
+      
       return {
         date: format(start, 'MMM dd'),
         duration,
-        features: session.features_used?.length || 0
+        features: featuresUsed
       };
     });
   }, [sessionData]);
