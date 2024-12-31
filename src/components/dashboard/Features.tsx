@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, X, Lock } from 'lucide-react';
 import { useSession } from '@supabase/auth-helpers-react';
 import { useSubscriptions } from '@/context/SubscriptionContext';
-import { cn } from '@/lib/utils';
+import FeatureProgress from './FeatureProgress';
+import PlanCard from './PlanCard';
 
 const Features = () => {
   const session = useSession();
@@ -49,7 +48,6 @@ const Features = () => {
         yearly: '$119.99/yr',
         yearlyNote: '(2 months free!)'
       },
-      isPopular: true,
       features: [
         { name: 'All Simplimediate Plan features', included: true },
         { name: 'Advanced analytics & AI recommendations', included: true },
@@ -103,109 +101,32 @@ const Features = () => {
 
   return (
     <div className="space-y-16">
-      <div className="space-y-8">
-        <h2 className="text-3xl font-bold text-white text-center">Feature Progress</h2>
-        <div className="max-w-3xl mx-auto space-y-4">
-          {highlightedFeatures.map((feature) => (
-            <Card 
-              key={feature.title}
-              className={cn(
-                "relative overflow-hidden transition-all duration-300",
-                userTier === feature.tier ? "bg-white/10" : "bg-white/5"
-              )}
-            >
-              <div className={cn(
-                "absolute inset-0 backdrop-blur-sm transition-opacity",
-                userTier === feature.tier ? "opacity-0" : "opacity-100 bg-black/40"
-              )}>
-                <div className="flex items-center justify-center h-full">
-                  <Lock className="w-8 h-8 text-white/50" />
-                </div>
-              </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-white/70">{feature.description}</p>
-                <div className="mt-2 text-sm text-white/50">
-                  Available in: {feature.tier}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <FeatureProgress 
+        userTier={userTier}
+        highlightedFeatures={highlightedFeatures}
+      />
 
       <div>
         <h2 className="text-3xl font-bold text-white text-center mb-12">Subscription Plans</h2>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {tiers.slice(0, 2).map((tier) => (
-              <Card 
-                key={tier.name} 
-                className="backdrop-blur-xl border-white/10 bg-white/10"
-              >
-                <CardHeader>
-                  <CardTitle className="text-xl text-white">
-                    {tier.name}
-                    <div className="flex flex-col space-y-1 mt-2">
-                      <span className="text-lg font-normal text-white/80">
-                        {tier.price.monthly}
-                      </span>
-                      <span className="text-sm font-normal text-white/60">
-                        or {tier.price.yearly} {tier.price.yearlyNote}
-                      </span>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-4">
-                    {tier.features.map((feature) => (
-                      <li key={feature.name} className="flex items-center gap-3">
-                        {feature.included ? (
-                          <Check className="w-5 h-5 text-green-500" />
-                        ) : (
-                          <X className="w-5 h-5 text-red-500" />
-                        )}
-                        <span className="text-white/90">{feature.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <PlanCard 
+                key={tier.name}
+                name={tier.name}
+                price={tier.price}
+                features={tier.features}
+              />
             ))}
           </div>
           
           <div className="mt-8">
-            <Card 
-              className="backdrop-blur-xl border-white/10 bg-white/20 transform scale-105 shadow-xl"
-            >
-              <CardHeader>
-                <CardTitle className="text-2xl text-white text-center">
-                  {tiers[2].name}
-                  <div className="flex flex-col space-y-1 mt-2">
-                    <span className="text-xl font-normal text-white/80">
-                      {tiers[2].price.monthly}
-                    </span>
-                    <span className="text-sm font-normal text-white/60">
-                      or {tiers[2].price.yearly} {tiers[2].price.yearlyNote}
-                    </span>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {tiers[2].features.map((feature) => (
-                    <li key={feature.name} className="flex items-center gap-3">
-                      {feature.included ? (
-                        <Check className="w-5 h-5 text-green-500" />
-                      ) : (
-                        <X className="w-5 h-5 text-red-500" />
-                      )}
-                      <span className="text-white/90">{feature.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            <PlanCard 
+              name={tiers[2].name}
+              price={tiers[2].price}
+              features={tiers[2].features}
+              className="transform scale-105 shadow-xl bg-white/20"
+            />
           </div>
         </div>
       </div>
