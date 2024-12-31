@@ -21,7 +21,7 @@ const Chemistry = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -33,7 +33,7 @@ const Chemistry = () => {
 
       if (error) throw error;
 
-      const assistantMessage = {
+      const assistantMessage: Message = {
         role: 'assistant',
         content: data.suggestion
       };
