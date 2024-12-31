@@ -11,20 +11,12 @@ const Features = () => {
 
   const tiers = [
     {
-      name: 'Simpli Plan',
-      price: 'Free',
-      features: [
-        { name: 'Basic subscription tracking', included: true },
-        { name: 'Manual subscription management', included: true },
-        { name: 'Basic notifications', included: true },
-        { name: 'Up to 5 subscriptions', included: true },
-        { name: 'Basic analytics', included: true },
-        { name: 'Email support', included: true },
-      ],
-    },
-    {
       name: 'Simplittle Plan',
-      price: '$5.99/mo',
+      price: {
+        monthly: '$5.99/mo',
+        yearly: '$59.99/yr',
+        yearlyNote: '(2 months free!)'
+      },
       features: [
         { name: 'Up to 20 subscriptions', included: true },
         { name: 'Customizable notifications scheduling', included: true },
@@ -35,11 +27,31 @@ const Features = () => {
       ],
     },
     {
+      name: 'Simplimediate Plan',
+      price: {
+        monthly: '$8.99/mo',
+        yearly: '$89.99/yr',
+        yearlyNote: '(2 months free!)'
+      },
+      features: [
+        { name: 'Up to 50 subscriptions', included: true },
+        { name: 'Advanced notification features', included: true },
+        { name: 'Enhanced analytics dashboard', included: true },
+        { name: 'Priority email support', included: true },
+        { name: 'Collaboration tools', included: true },
+        { name: 'All Simplittle Plan features', included: true },
+      ],
+    },
+    {
       name: 'Simplifessional Plan',
-      price: '$11.99/mo',
+      price: {
+        monthly: '$11.99/mo',
+        yearly: '$119.99/yr',
+        yearlyNote: '(2 months free!)'
+      },
       isPopular: true,
       features: [
-        { name: 'All Simplittle Plan features', included: true },
+        { name: 'All Simplimediate Plan features', included: true },
         { name: 'Advanced analytics & AI recommendations', included: true },
         { name: 'Multi-account family/business support', included: true },
         { name: 'Priority customer support', included: true },
@@ -58,7 +70,7 @@ const Features = () => {
     {
       title: 'Subscription Tracking',
       description: 'Track and manage all your subscriptions in one place',
-      tier: 'Simpli Plan',
+      tier: 'Simplittle Plan',
     },
     {
       title: 'Automated Detection',
@@ -87,7 +99,7 @@ const Features = () => {
     },
   ];
 
-  const userTier = 'Simpli Plan'; // This should be fetched from user's actual subscription
+  const userTier = 'Simplittle Plan'; // This should be fetched from user's actual subscription
 
   return (
     <div className="space-y-16">
@@ -124,26 +136,64 @@ const Features = () => {
 
       <div>
         <h2 className="text-3xl font-bold text-white text-center mb-12">Subscription Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {tiers.map((tier) => (
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {tiers.slice(0, 2).map((tier) => (
+              <Card 
+                key={tier.name} 
+                className="backdrop-blur-xl border-white/10 bg-white/10"
+              >
+                <CardHeader>
+                  <CardTitle className="text-xl text-white">
+                    {tier.name}
+                    <div className="flex flex-col space-y-1 mt-2">
+                      <span className="text-lg font-normal text-white/80">
+                        {tier.price.monthly}
+                      </span>
+                      <span className="text-sm font-normal text-white/60">
+                        or {tier.price.yearly} {tier.price.yearlyNote}
+                      </span>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-4">
+                    {tier.features.map((feature) => (
+                      <li key={feature.name} className="flex items-center gap-3">
+                        {feature.included ? (
+                          <Check className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <X className="w-5 h-5 text-red-500" />
+                        )}
+                        <span className="text-white/90">{feature.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="mt-8">
             <Card 
-              key={tier.name} 
-              className={cn(
-                "backdrop-blur-xl border-white/10",
-                tier.isPopular ? "bg-white/20 scale-105" : "bg-white/10"
-              )}
+              className="backdrop-blur-xl border-white/10 bg-white/20 transform scale-105 shadow-xl"
             >
               <CardHeader>
-                <CardTitle className="text-xl text-white">
-                  {tier.name}
-                  <span className="block text-lg font-normal mt-2 text-white/80">
-                    {tier.price}
-                  </span>
+                <CardTitle className="text-2xl text-white text-center">
+                  {tiers[2].name}
+                  <div className="flex flex-col space-y-1 mt-2">
+                    <span className="text-xl font-normal text-white/80">
+                      {tiers[2].price.monthly}
+                    </span>
+                    <span className="text-sm font-normal text-white/60">
+                      or {tiers[2].price.yearly} {tiers[2].price.yearlyNote}
+                    </span>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-4">
-                  {tier.features.map((feature) => (
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {tiers[2].features.map((feature) => (
                     <li key={feature.name} className="flex items-center gap-3">
                       {feature.included ? (
                         <Check className="w-5 h-5 text-green-500" />
@@ -156,7 +206,7 @@ const Features = () => {
                 </ul>
               </CardContent>
             </Card>
-          ))}
+          </div>
         </div>
       </div>
     </div>
