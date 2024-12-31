@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 interface Subscription {
   name: string;
   description: string;
-  features?: string[]; // Make features optional
+  features?: string[];
   logoPath: string | null;
 }
 
@@ -28,19 +28,35 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Card className={`w-full h-full relative overflow-hidden backdrop-blur-xl bg-white/10 border-white/10 transition-all duration-300 ${isActive ? 'scale-110' : 'scale-100'}`}>
+      <Card 
+        className={`
+          w-full h-full relative overflow-hidden 
+          backdrop-blur-sm bg-white/5 border-white/5 
+          transition-all duration-300 
+          ${isActive ? 'scale-110' : 'scale-100'}
+          ${isHovered ? 'bg-white/10' : ''}
+        `}
+      >
         <CardContent className="p-6 h-full flex flex-col items-center justify-center">
-          {subscription.logoPath ? (
-            <img
-              src={subscription.logoPath}
-              alt={`${subscription.name} logo`}
-              className="w-32 h-32 object-contain mb-4"
-            />
-          ) : (
-            <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-4xl font-bold mb-4">
-              {subscription.name[0]}
-            </div>
-          )}
+          <motion.div
+            animate={{
+              scale: isHovered ? 0.8 : 1,
+              opacity: isHovered ? 0.7 : 1
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {subscription.logoPath ? (
+              <img
+                src={subscription.logoPath}
+                alt={`${subscription.name} logo`}
+                className="w-32 h-32 object-contain"
+              />
+            ) : (
+              <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500/50 to-pink-500/50 flex items-center justify-center text-white text-4xl font-bold">
+                {subscription.name[0]}
+              </div>
+            )}
+          </motion.div>
 
           <AnimatePresence>
             {isHovered && (
@@ -48,7 +64,7 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="absolute inset-0 p-6 bg-gradient-to-b from-black/80 to-black/95 flex flex-col justify-center"
+                className="absolute inset-0 p-6 bg-gradient-to-b from-black/90 to-black/95 flex flex-col justify-center"
               >
                 <h3 className="text-xl font-bold text-white mb-2">{subscription.name}</h3>
                 <p className="text-sm text-white/80 mb-4">{subscription.description}</p>
