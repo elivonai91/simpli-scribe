@@ -49,7 +49,7 @@ const Index = () => {
                 whileTap={{ scale: 0.95 }}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 h-[52px] rounded-xl flex items-center gap-2 shadow-lg shadow-purple-500/30 whitespace-nowrap w-[180px] justify-center"
               >
-                <Plus size={20} />
+                <Plus className="h-5 w-5 text-white" />
                 Add Subscription
               </motion.button>
             </div>
