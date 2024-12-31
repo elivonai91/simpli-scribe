@@ -6,6 +6,17 @@ import { useSession } from '@supabase/auth-helpers-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Loader2 } from 'lucide-react';
 
+interface SubscriptionData {
+  billing_amount: number;
+  billing_cycle: 'monthly' | 'yearly';
+  created_at: string;
+}
+
+interface TrendData {
+  date: string;
+  amount: number;
+}
+
 export const SpendingTrends = () => {
   const session = useSession();
 
@@ -21,7 +32,7 @@ export const SpendingTrends = () => {
       if (error) throw error;
 
       // Group subscriptions by month
-      const monthlyData = subscriptions?.reduce((acc: any, sub) => {
+      const monthlyData = (subscriptions as SubscriptionData[])?.reduce((acc: Record<string, number>, sub) => {
         const date = new Date(sub.created_at);
         const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
         
@@ -39,7 +50,7 @@ export const SpendingTrends = () => {
       return Object.entries(monthlyData || {}).map(([date, amount]) => ({
         date,
         amount: Number(amount.toFixed(2))
-      }));
+      })) as TrendData[];
     },
     enabled: !!session?.user
   });

@@ -8,6 +8,17 @@ import { Loader2 } from 'lucide-react';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+interface SubscriptionData {
+  billing_amount: number;
+  billing_cycle: 'monthly' | 'yearly';
+  service_category: string;
+}
+
+interface CategoryData {
+  name: string;
+  value: number;
+}
+
 export const CategoryDistribution = () => {
   const session = useSession();
 
@@ -21,7 +32,7 @@ export const CategoryDistribution = () => {
 
       if (error) throw error;
 
-      const categoryTotals = subscriptions?.reduce((acc: any, sub) => {
+      const categoryTotals = (subscriptions as SubscriptionData[])?.reduce((acc: Record<string, number>, sub) => {
         const category = sub.service_category || 'Uncategorized';
         if (!acc[category]) {
           acc[category] = 0;
@@ -35,7 +46,7 @@ export const CategoryDistribution = () => {
       return Object.entries(categoryTotals || {}).map(([name, value]) => ({
         name,
         value: Number(value.toFixed(2))
-      }));
+      })) as CategoryData[];
     },
     enabled: !!session?.user
   });
