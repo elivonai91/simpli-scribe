@@ -14,13 +14,21 @@ serve(async (req) => {
 
   try {
     const { serviceName } = await req.json()
-    console.log('Fetching logo for service:', serviceName)
+    console.log('Starting logo generation for service:', serviceName)
 
+    // Verify Perplexity API key
+    const perplexityKey = Deno.env.get('PERPLEXITY_API_KEY')
+    if (!perplexityKey) {
+      console.error('Perplexity API key not found')
+      throw new Error('Perplexity API key not configured')
+    }
+
+    console.log('Making request to Perplexity API...')
     // Use Perplexity to search for the official logo
     const perplexityResponse = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('PERPLEXITY_API_KEY')}`,
+        'Authorization': `Bearer ${perplexityKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -51,12 +59,20 @@ serve(async (req) => {
     const logoUrl = data.choices[0].message.content.trim()
     console.log('Found logo URL:', logoUrl)
 
+    if (!logoUrl.match(/\.(jpg|jpeg|png)$/i)) {
+      console.error('Invalid logo URL format:', logoUrl)
+      throw new Error('Invalid logo URL format - must end in .jpg, .jpeg, or .png')
+    }
+
     // Download the image
+    console.log('Downloading image from URL:', logoUrl)
     const imageResponse = await fetch(logoUrl)
     if (!imageResponse.ok) {
+      console.error('Failed to download image:', imageResponse.status, imageResponse.statusText)
       throw new Error('Failed to download logo image')
     }
     const imageBlob = await imageResponse.blob()
+    console.log('Image downloaded successfully, size:', imageBlob.size)
 
     // Upload to Supabase Storage
     const supabase = createClient(
@@ -87,11 +103,12 @@ serve(async (req) => {
       .from('subscription_logos')
       .getPublicUrl(fileName)
 
-    console.log('Successfully fetched and uploaded logo:', publicUrl)
+    console.log('Successfully uploaded logo. Public URL:', publicUrl)
 
     return new Response(
       JSON.stringify({
-        logo_path: publicUrl
+        logo_path: publicUrl,
+        status: 'success'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -103,7 +120,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: error.message,
-        details: error.toString()
+        details: error.toString(),
+        status: 'error'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
