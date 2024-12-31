@@ -26,7 +26,7 @@ serve(async (req) => {
 2. Cost efficiency and potential bundle savings
 3. Feature complementarity
 4. Common use cases and workflows
-5. Alternative combinations for different budgets
+5. Alternative combinations
 
 Always structure your responses with:
 - Main recommendation
