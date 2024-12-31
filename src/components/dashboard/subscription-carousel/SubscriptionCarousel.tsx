@@ -23,7 +23,6 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
     if (!isAutoRotating) return;
 
     const interval = setInterval(() => {
-      // Continuously increment rotation
       setRotation(current => current + (360 / subscriptions.length));
     }, 3000);
 
@@ -47,12 +46,12 @@ export const SubscriptionCarousel = ({ subscriptions }: SubscriptionCarouselProp
       onMouseLeave={() => setIsAutoRotating(true)}
     >
       <div className="relative w-full max-w-4xl h-full perspective-1000">
+        {/* Shadow effect container */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-4 bg-gradient-to-b from-purple-500/[0.02] to-transparent blur-xl" />
+        
         <div className="absolute inset-0 flex items-center justify-center transform-style-3d">
           {subscriptions.map((subscription, index) => {
-            // Calculate each card's rotation based on its index and the current rotation
             const cardRotation = ((index * (360 / subscriptions.length)) - rotation);
-            
-            // Calculate z-index based on rotation position
             const normalizedRotation = ((cardRotation % 360) + 360) % 360;
             const zIndex = normalizedRotation > 90 && normalizedRotation < 270 ? 0 : 10;
 

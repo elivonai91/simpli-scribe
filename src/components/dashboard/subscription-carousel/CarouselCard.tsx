@@ -31,10 +31,10 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
       <Card 
         className={`
           w-full h-full relative overflow-hidden 
-          backdrop-blur-[2px] bg-white/[0.02] border-white/[0.02]
+          backdrop-blur-[1px] bg-white/[0.01] border-white/[0.01]
           transition-all duration-300 
           ${isActive ? 'scale-110' : 'scale-100'}
-          ${isHovered ? 'bg-white/5' : ''}
+          ${isHovered ? 'bg-white/[0.03]' : ''}
         `}
       >
         <CardContent className="p-6 h-full flex flex-col items-center justify-center">
@@ -52,7 +52,7 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
                 className="w-32 h-32 object-contain"
               />
             ) : (
-              <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center text-white text-4xl font-bold">
+              <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-white text-4xl font-bold">
                 {subscription.name[0]}
               </div>
             )}
@@ -64,7 +64,7 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="absolute inset-0 p-6 bg-gradient-to-b from-black/95 to-black/98 flex flex-col justify-center"
+                className="absolute inset-0 p-6 bg-gradient-to-b from-black/98 to-black/99 flex flex-col justify-center"
               >
                 <h3 className="text-xl font-bold text-white mb-2">{subscription.name}</h3>
                 <p className="text-sm text-white/80 mb-4">{subscription.description}</p>
