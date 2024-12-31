@@ -48,9 +48,9 @@ export const NotificationsIcon = () => {
   return (
     <Button variant="ghost" size="icon" className="relative">
       {hasNotifications ? (
-        <BellDot className="h-7 w-7 text-ruby-500" />
+        <BellDot className="h-10 w-10 text-ruby-500" />
       ) : (
-        <Bell className="h-7 w-7 text-ruby-500" />
+        <Bell className="h-10 w-10 text-ruby-500" />
       )}
     </Button>
   );
