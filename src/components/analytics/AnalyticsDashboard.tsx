@@ -8,6 +8,9 @@ import { SubscriptionGrowth } from './subscription/SubscriptionGrowth';
 import { ChurnAnalysis } from './subscription/ChurnAnalysis';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { BillingCycleDistribution } from './metrics/BillingCycleDistribution';
+import { TopSpendingCategories } from './metrics/TopSpendingCategories';
+import { SubscriptionTrends } from './metrics/SubscriptionTrends';
 
 export const AnalyticsDashboard = () => {
   // Check if user is admin
@@ -45,10 +48,17 @@ export const AnalyticsDashboard = () => {
             </div>
           </>
         )}
+        
         <div>
           <h3 className="text-xl font-semibold mb-4">Subscription Overview</h3>
           <SubscriptionMetrics />
         </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <TopSpendingCategories />
+          <BillingCycleDistribution />
+        </div>
+
         <div>
           <h3 className="text-xl font-semibold mb-4">Subscription Growth & Churn</h3>
           <div className="grid gap-4 md:grid-cols-2">
@@ -56,6 +66,12 @@ export const AnalyticsDashboard = () => {
             <ChurnAnalysis />
           </div>
         </div>
+
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Subscription Trends</h3>
+          <SubscriptionTrends />
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
           <SpendingTrends />
           <CategoryDistribution />
