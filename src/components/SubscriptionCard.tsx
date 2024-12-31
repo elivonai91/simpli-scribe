@@ -17,43 +17,77 @@ interface SubscriptionCardProps {
 export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
   const { removeSubscription, updateSubscription } = useSubscriptions();
   const [showScheduleForm, setShowScheduleForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleQuickCancel = () => {
+  const handleQuickCancel = async () => {
     if (window.confirm('Are you sure you want to cancel this subscription?')) {
-      removeSubscription(subscription.id);
-      toast({
-        title: "Subscription Cancelled",
-        description: `Your ${subscription.name} subscription has been cancelled.`
-      });
+      setIsLoading(true);
+      try {
+        await removeSubscription(subscription.id);
+        toast({
+          title: "Subscription Cancelled",
+          description: `Your ${subscription.name} subscription has been cancelled.`
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to cancel subscription. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleQuickUpgrade = () => {
+  const handleQuickUpgrade = async () => {
     if (subscription.billingCycle === 'monthly') {
-      const yearlyPrice = subscription.cost * 10; // 2 months free
-      updateSubscription({
-        ...subscription,
-        billingCycle: 'yearly',
-        cost: yearlyPrice
-      });
-      toast({
-        title: "Subscription Upgraded",
-        description: `Your ${subscription.name} subscription has been upgraded to yearly billing with 2 months free!`
-      });
+      setIsLoading(true);
+      try {
+        const yearlyPrice = subscription.cost * 10; // 2 months free
+        await updateSubscription({
+          ...subscription,
+          billingCycle: 'yearly',
+          cost: yearlyPrice
+        });
+        toast({
+          title: "Subscription Upgraded",
+          description: `Your ${subscription.name} subscription has been upgraded to yearly billing with 2 months free!`
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to upgrade subscription. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleQuickRenewal = () => {
-    const nextDate = new Date();
-    nextDate.setMonth(nextDate.getMonth() + (subscription.billingCycle === 'yearly' ? 12 : 1));
-    updateSubscription({
-      ...subscription,
-      nextBillingDate: nextDate
-    });
-    toast({
-      title: "Subscription Renewed",
-      description: `Your ${subscription.name} subscription has been renewed.`
-    });
+  const handleQuickRenewal = async () => {
+    setIsLoading(true);
+    try {
+      const nextDate = new Date();
+      nextDate.setMonth(nextDate.getMonth() + (subscription.billingCycle === 'yearly' ? 12 : 1));
+      await updateSubscription({
+        ...subscription,
+        nextBillingDate: nextDate
+      });
+      toast({
+        title: "Subscription Renewed",
+        description: `Your ${subscription.name} subscription has been renewed.`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to renew subscription. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -71,6 +105,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                   variant="outline"
                   size="icon"
                   onClick={handleQuickUpgrade}
+                  disabled={isLoading}
                   className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
                   title="Upgrade to yearly"
                 >
@@ -81,6 +116,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                 variant="outline"
                 size="icon"
                 onClick={handleQuickRenewal}
+                disabled={isLoading}
                 className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
                 title="Renew subscription"
               >
@@ -90,6 +126,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                 variant="outline"
                 size="icon"
                 onClick={handleQuickCancel}
+                disabled={isLoading}
                 className="h-8 w-8 border-white/10 bg-white/10 hover:bg-white/20"
                 title="Cancel subscription"
               >
@@ -100,7 +137,8 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => removeSubscription(subscription.id)}
+              onClick={handleQuickCancel}
+              disabled={isLoading}
               className="text-ruby-400 hover:text-ruby-400/90 hover:bg-white/10 h-8 w-8"
             >
               <Trash2 className="h-4 w-4" />
