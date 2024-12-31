@@ -15,7 +15,7 @@ export const SidebarMenuItem = ({ id, label, icon: Icon, isActive, onClick }: Si
     <motion.button
       whileHover={{ x: 5 }}
       whileTap={{ scale: 0.98 }}
-      className={`flex items-center px-6 py-4 w-full rounded-xl mb-2 ${
+      className={`flex items-center px-6 py-4 w-full rounded-xl mb-2 text-base ${
         isActive ? 'bg-white/20 text-white' : 'text-white/70 hover:bg-white/10'
       }`}
       onClick={onClick}
