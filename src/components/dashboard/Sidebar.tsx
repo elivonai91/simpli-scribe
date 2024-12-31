@@ -29,8 +29,8 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   const handleNavigation = (item: typeof menuItems[0]) => {
     if (item.path === location.pathname) return;
     
-    // Some routes might not be implemented yet
-    if (!['/chemistry', '/'].includes(item.path)) {
+    // Only allow navigation to implemented routes
+    if (!['/chemistry', '/', '/analytics'].includes(item.path)) {
       toast.info("This feature is coming soon!");
       return;
     }

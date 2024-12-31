@@ -8,6 +8,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Chemistry from "./pages/Chemistry";
+import Analytics from "./pages/Analytics";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from '@supabase/auth-helpers-react';
 
@@ -56,6 +57,14 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <Chemistry />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analytics"
+                  element={
+                    <ProtectedRoute>
+                      <Analytics />
                     </ProtectedRoute>
                   }
                 />
