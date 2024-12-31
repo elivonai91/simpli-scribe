@@ -33,6 +33,30 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_usage: {
+        Row: {
+          created_at: string | null
+          feature_name: string
+          id: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          feature_name: string
+          id?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          feature_name?: string
+          id?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_schedules: {
         Row: {
           created_at: string
@@ -259,6 +283,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_sessions: {
+        Row: {
+          created_at: string | null
+          features_used: Json | null
+          id: string
+          pages_visited: Json | null
+          session_end: string | null
+          session_start: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          features_used?: Json | null
+          id?: string
+          pages_visited?: Json | null
+          session_end?: string | null
+          session_start?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          features_used?: Json | null
+          id?: string
+          pages_visited?: Json | null
+          session_end?: string | null
+          session_start?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_subscriptions: {
         Row: {
