@@ -3,6 +3,7 @@ import { SubscriptionMetrics } from './SubscriptionMetrics';
 import { SpendingTrends } from './SpendingTrends';
 import { CategoryDistribution } from './CategoryDistribution';
 import { UserEngagementMetrics } from './UserEngagementMetrics';
+import { UserEngagementDetails } from './engagement/UserEngagementDetails';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -31,10 +32,16 @@ export const AnalyticsDashboard = () => {
       <h2 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h2>
       <div className="space-y-6">
         {isAdmin && (
-          <div>
-            <h3 className="text-xl font-semibold mb-4">User Engagement</h3>
-            <UserEngagementMetrics />
-          </div>
+          <>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">User Engagement Overview</h3>
+              <UserEngagementMetrics />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Detailed Engagement Analytics</h3>
+              <UserEngagementDetails />
+            </div>
+          </>
         )}
         <div>
           <h3 className="text-xl font-semibold mb-4">Subscription Overview</h3>
