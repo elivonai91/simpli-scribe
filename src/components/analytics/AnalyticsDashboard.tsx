@@ -4,6 +4,8 @@ import { SpendingTrends } from './SpendingTrends';
 import { CategoryDistribution } from './CategoryDistribution';
 import { UserEngagementMetrics } from './UserEngagementMetrics';
 import { UserEngagementDetails } from './engagement/UserEngagementDetails';
+import { SubscriptionGrowth } from './subscription/SubscriptionGrowth';
+import { ChurnAnalysis } from './subscription/ChurnAnalysis';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -47,7 +49,14 @@ export const AnalyticsDashboard = () => {
           <h3 className="text-xl font-semibold mb-4">Subscription Overview</h3>
           <SubscriptionMetrics />
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Subscription Growth & Churn</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            <SubscriptionGrowth />
+            <ChurnAnalysis />
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
           <SpendingTrends />
           <CategoryDistribution />
         </div>
