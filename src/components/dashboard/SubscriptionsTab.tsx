@@ -7,6 +7,15 @@ import { motion } from 'framer-motion';
 import { CreditCard, Package, Sparkles } from 'lucide-react';
 import { Button } from '../ui/button';
 
+interface SubscriptionPlan {
+  id: string;
+  name: string;
+  description: string | null;
+  features: string[];
+  monthly_price: number;
+  yearly_price: number;
+}
+
 export const SubscriptionsTab = () => {
   const session = useSession();
 
@@ -31,7 +40,12 @@ export const SubscriptionsTab = () => {
         .select('*')
         .single();
       if (error) throw error;
-      return data;
+      
+      // Parse the features JSON into an array of strings
+      return {
+        ...data,
+        features: Array.isArray(data.features) ? data.features : []
+      } as SubscriptionPlan;
     },
     enabled: !!session?.user?.id,
   });
