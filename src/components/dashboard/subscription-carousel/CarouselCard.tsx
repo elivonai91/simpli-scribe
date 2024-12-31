@@ -17,6 +17,12 @@ interface CarouselCardProps {
 
 export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    console.error(`Failed to load image for ${subscription.name}:`, subscription.logoPath);
+    setImageError(true);
+  };
 
   return (
     <motion.div
@@ -45,11 +51,12 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
             }}
             transition={{ duration: 0.3 }}
           >
-            {subscription.logoPath ? (
+            {subscription.logoPath && !imageError ? (
               <img
-                src={subscription.logoPath}
+                src={subscription.logoPath.startsWith('http') ? subscription.logoPath : `${window.location.origin}${subscription.logoPath}`}
                 alt={`${subscription.name} logo`}
                 className="w-32 h-32 object-contain"
+                onError={handleImageError}
               />
             ) : (
               <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-white text-4xl font-bold">
