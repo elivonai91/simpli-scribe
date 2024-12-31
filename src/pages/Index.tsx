@@ -8,6 +8,8 @@ import { Plus } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { SubscriptionProvider } from '@/context/SubscriptionContext';
 import { NavigationMenu } from '@/components/dashboard/NavigationMenu';
+import { NotificationsIcon } from '@/components/dashboard/NotificationsIcon';
+import { NotificationCarousel } from '@/components/dashboard/NotificationCarousel';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -31,10 +33,17 @@ const Index = () => {
             backgroundColor: 'rgba(28, 28, 33, 0.8)',
           }}
         >
-          <NavigationMenu />
+          <div className="flex items-center justify-between">
+            <NavigationMenu />
+            <NotificationsIcon />
+          </div>
         </motion.div>
 
         <div className="ml-72 pt-24">
+          <div className="px-8">
+            <NotificationCarousel />
+          </div>
+
           {/* 3D Carousel Section */}
           <div className="w-full h-[500px] mb-8">
             <PopularSubscriptions />
