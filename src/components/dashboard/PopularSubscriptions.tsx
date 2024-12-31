@@ -62,12 +62,15 @@ const popularServices = [
 export const PopularSubscriptions = () => {
   const { toast } = useToast();
 
-  const { data: subscriptions, isLoading } = useQuery({
+  const { data: subscriptions, isLoading, error } = useQuery({
     queryKey: ['popularSubscriptions'],
     queryFn: async () => {
+      console.log('Starting to fetch logos for popular services');
       const results = await Promise.all(
         popularServices.map(async (service) => {
           try {
+            console.log(`Processing service: ${service.name}`);
+            
             // First check if we already have a logo stored
             const { data: existingLogo, error: fetchError } = await supabase
               .from('subscription_logos')
@@ -81,6 +84,7 @@ export const PopularSubscriptions = () => {
             }
 
             if (existingLogo?.logo_path) {
+              console.log(`Found existing logo for ${service.name}:`, existingLogo.logo_path);
               return {
                 ...service,
                 logoPath: existingLogo.logo_path,
@@ -88,7 +92,8 @@ export const PopularSubscriptions = () => {
               };
             }
 
-            // If no logo exists, generate one using the AI function
+            console.log(`Generating new logo for ${service.name}`);
+            // If no logo exists, generate one using the edge function
             const { data: generatedLogo, error: generateError } = await supabase.functions.invoke('generate-logo', {
               body: { serviceName: service.name }
             });
@@ -98,7 +103,9 @@ export const PopularSubscriptions = () => {
               throw generateError;
             }
 
-            // Store the generated logo path, handle potential duplicates
+            console.log(`Generated logo response for ${service.name}:`, generatedLogo);
+
+            // Store the generated logo path
             if (generatedLogo?.logo_path) {
               const { error: insertError } = await supabase
                 .from('subscription_logos')
@@ -143,6 +150,10 @@ export const PopularSubscriptions = () => {
     retry: 2,
     retryDelay: 1000,
   });
+
+  if (error) {
+    console.error('Query error:', error);
+  }
 
   if (isLoading) {
     return (
