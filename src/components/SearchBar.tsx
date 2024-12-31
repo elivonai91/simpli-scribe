@@ -67,14 +67,14 @@ export const SearchBar = () => {
 
   return (
     <div className="space-y-4 w-full max-w-[calc(100%-200px)]">
-      <div className="backdrop-blur-xl bg-white/10 rounded-xl flex items-center px-6 h-[52px] w-full">
+      <div className="backdrop-blur-xl bg-white/10 rounded-xl flex items-center px-6 h-[60px] w-full">
         <Search className="w-5 h-5 text-white/50" />
         <input
           type="text"
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search subscriptions..."
-          className="ml-4 bg-transparent text-white outline-none w-full placeholder-white/50"
+          className="ml-4 bg-transparent text-white outline-none w-full placeholder-white/50 text-base"
         />
         <motion.button
           whileHover={{ scale: 1.05 }}
