@@ -47,7 +47,7 @@ const Index = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 h-[60px] rounded-xl flex items-center gap-3 shadow-lg shadow-purple-500/30 whitespace-nowrap w-[200px] justify-center text-base"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 h-[60px] rounded-xl flex items-center gap-3 shadow-lg shadow-purple-500/30 whitespace-nowrap w-[200px] justify-center text-base border border-white/10"
               >
                 <Plus className="w-5 h-5 text-white" strokeWidth={2.5} />
                 Add Subscription
