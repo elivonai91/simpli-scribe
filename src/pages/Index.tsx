@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { StatsOverview } from '@/components/dashboard/StatsOverview';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
@@ -41,25 +41,19 @@ const Index = () => {
           </div>
 
           <div className="px-8 space-y-8">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-8">
               <div className="w-full max-w-3xl">
                 <SearchBar />
               </div>
               
-              <div className="flex items-center space-x-6">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl flex items-center shadow-lg shadow-purple-500/30"
-                >
-                  <Plus className="w-5 h-5 mr-2" />
-                  Add Subscription
-                </motion.button>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-400 to-pink-400 shadow-lg"
-                />
-              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl flex items-center shadow-lg shadow-purple-500/30"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Add Subscription
+              </motion.button>
             </div>
 
             <div className="space-y-8">
