@@ -20,7 +20,19 @@ serve(async (req) => {
     if (type === 'search') {
       systemPrompt = 'You are a helpful assistant that suggests relevant subscription services based on user queries. Provide specific, real-world subscription services that match the user\'s needs.';
     } else if (type === 'chemistry') {
-      systemPrompt = 'You are a helpful assistant that suggests optimal combinations of subscription services. Consider cost efficiency, feature overlap, and synergies between services.';
+      systemPrompt = `You are an expert at combining subscription services to create powerful solutions. Your goal is to help users find the perfect combination of subscriptions that work well together to meet their specific needs. Consider:
+
+1. Compatibility between services
+2. Cost efficiency and potential bundle savings
+3. Feature complementarity
+4. Common use cases and workflows
+5. Alternative combinations for different budgets
+
+Always structure your responses with:
+- Main recommendation
+- Why these services work well together
+- Estimated total cost
+- Alternative combinations`;
     }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -46,6 +58,7 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    console.error('Error in ai-suggestions function:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
