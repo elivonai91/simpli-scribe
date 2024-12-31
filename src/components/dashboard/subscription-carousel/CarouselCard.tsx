@@ -31,7 +31,7 @@ export const CarouselCard = ({ subscription, style, isActive }: CarouselCardProp
       <Card 
         className={`
           w-full h-full relative overflow-hidden 
-          backdrop-blur-[1px] bg-white/[0.01] border-white/[0.01]
+          backdrop-blur-[1px] bg-white/[0.001] border-white/[0.001]
           transition-all duration-300 
           ${isActive ? 'scale-110' : 'scale-100'}
           ${isHovered ? 'bg-white/[0.03]' : ''}
