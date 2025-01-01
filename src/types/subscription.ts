@@ -10,6 +10,7 @@ export interface Subscription {
     fortyEightHour: boolean;
     twentyFourHour: boolean;
   };
+  plans?: SubscriptionPlan[];
 }
 
 export interface SubscriptionPlan {

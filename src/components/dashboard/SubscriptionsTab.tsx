@@ -14,10 +14,21 @@ export const SubscriptionsTab = () => {
   const { data: userSubscriptions, isLoading } = useQuery({
     queryKey: ['userSubscriptions', session?.user?.id],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
       const { data, error } = await supabase
         .from('user_subscriptions')
-        .select('*')
-        .eq('user_id', session?.user?.id);
+        .select(`
+          *,
+          subscription_plans (
+            name,
+            monthly_price,
+            yearly_price,
+            features
+          )
+        `)
+        .eq('user_id', session.user.id)
+        .eq('status', 'active');
       
       if (error) {
         console.error('Error fetching user subscriptions:', error);
@@ -44,7 +55,8 @@ export const SubscriptionsTab = () => {
           category: sub.service_category || 'Other',
           nextBillingDate: new Date(sub.next_billing_date),
           notes: sub.notes,
-          reminders: { fortyEightHour: false, twentyFourHour: false }
+          reminders: { fortyEightHour: false, twentyFourHour: false },
+          plans: sub.subscription_plans || []
         };
       }) || [];
     },

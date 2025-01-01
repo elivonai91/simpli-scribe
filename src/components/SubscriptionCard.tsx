@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { SubscriptionHeader } from './subscription/SubscriptionHeader';
 import { SubscriptionDetails } from './subscription/SubscriptionDetails';
 import { NotificationSection } from './subscription/NotificationSection';
+import { ManageSubscriptionDialog } from './ManageSubscriptionDialog';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -20,6 +21,9 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
           <div className="grid gap-4">
             <SubscriptionHeader subscription={subscription} />
             <SubscriptionDetails subscription={subscription} />
+            <div className="flex justify-end">
+              <ManageSubscriptionDialog subscription={subscription} />
+            </div>
             <NotificationSection subscriptionId={subscription.id} />
           </div>
         </CardContent>
