@@ -17,12 +17,11 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-black">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <div className="flex-1 overflow-auto">
         <div className="bg-gradient-to-b from-charcoal-900 to-charcoal-800">
-          {/* Hero Section */}
           <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
             <motion.div 
