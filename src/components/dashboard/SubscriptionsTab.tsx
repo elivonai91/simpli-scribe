@@ -6,6 +6,7 @@ import { toast } from '@/hooks/use-toast';
 import { CurrentPlanCard } from './subscriptions/CurrentPlanCard';
 import { ActiveSubscriptionsCard } from './subscriptions/ActiveSubscriptionsCard';
 import { PremiumFeaturesCard } from './subscriptions/PremiumFeaturesCard';
+import { SubscriptionPlan } from '@/types/subscription';
 
 export const SubscriptionsTab = () => {
   const session = useSession();
@@ -53,8 +54,14 @@ export const SubscriptionsTab = () => {
         throw error;
       }
       
-      console.log('Fetched subscription plans:', data);
-      return data;
+      // Transform the data to ensure features is a string array
+      const transformedData = data?.map(plan => ({
+        ...plan,
+        features: Array.isArray(plan.features) ? plan.features : []
+      })) as SubscriptionPlan[];
+      
+      console.log('Fetched subscription plans:', transformedData);
+      return transformedData;
     }
   });
 
@@ -67,10 +74,14 @@ export const SubscriptionsTab = () => {
   }
 
   // Use the first plan as current plan or fallback to a default
-  const currentPlan = subscriptionPlans?.[0] || {
+  const currentPlan: SubscriptionPlan = subscriptionPlans?.[0] || {
+    id: '0',
     name: 'Basic',
     description: 'Free tier',
-    features: []
+    features: [],
+    monthly_price: 0,
+    yearly_price: 0,
+    created_at: new Date().toISOString()
   };
 
   return (
