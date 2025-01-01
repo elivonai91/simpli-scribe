@@ -18,8 +18,8 @@ const Index = () => {
 
   return (
     <div className="relative flex min-h-screen">
-      {/* Fixed position sidebar with a solid background to ensure visibility */}
-      <aside className="fixed top-0 left-0 w-72 h-screen bg-charcoal-800 border-r border-white/10">
+      {/* Fixed position sidebar with a subtle background */}
+      <aside className="fixed top-0 left-0 w-72 h-screen border-r border-white/5">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </aside>
       
