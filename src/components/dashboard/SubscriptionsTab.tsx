@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@supabase/auth-helpers-react';
 import { toast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { SubscriptionCard } from '@/components/SubscriptionCard';
 import { motion } from 'framer-motion';
 import { SubscriptionPlan } from '@/types/subscription';
+import { SubscriptionsHeader } from './subscriptions/SubscriptionsHeader';
+import { EmptySubscriptions } from './subscriptions/EmptySubscriptions';
+import { SubscriptionGrid } from './subscriptions/SubscriptionGrid';
 
 export const SubscriptionsTab = () => {
   const session = useSession();
@@ -45,13 +45,11 @@ export const SubscriptionsTab = () => {
       }
       
       return data?.map(sub => {
-        // Ensure billing_cycle is either 'monthly' or 'yearly'
         let validBillingCycle: 'monthly' | 'yearly' = 'monthly';
         if (sub.billing_cycle === 'monthly' || sub.billing_cycle === 'yearly') {
           validBillingCycle = sub.billing_cycle as 'monthly' | 'yearly';
         }
 
-        // Transform subscription_plans data to match SubscriptionPlan type
         const plan = sub.subscription_plans as any;
         const subscriptionPlan: SubscriptionPlan | null = plan ? {
           id: plan.id,
@@ -89,47 +87,17 @@ export const SubscriptionsTab = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-semibold text-white">
-            Active Subscriptions ({userSubscriptions?.length || 0})
-          </h2>
-          <p className="text-white/70">
-            Manage and track all your subscriptions in one place
-          </p>
-        </div>
-        <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Subscription
-        </Button>
-      </div>
-
+      <SubscriptionsHeader subscriptionCount={userSubscriptions?.length || 0} />
       {userSubscriptions?.length === 0 ? (
-        <div className="text-center py-12">
-          <h3 className="text-lg font-medium text-white mb-2">
-            No active subscriptions
-          </h3>
-          <p className="text-white/70 mb-6">
-            Start tracking your subscriptions by adding your first one
-          </p>
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Your First Subscription
-          </Button>
-        </div>
+        <EmptySubscriptions />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {userSubscriptions?.map((subscription, index) => (
-            <motion.div
-              key={subscription.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <SubscriptionCard subscription={subscription} />
-            </motion.div>
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full"
+        >
+          <SubscriptionGrid subscriptions={userSubscriptions} />
+        </motion.div>
       )}
     </div>
   );
