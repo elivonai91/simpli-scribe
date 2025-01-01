@@ -54,17 +54,32 @@ export const SpendingTrends = () => {
         <div className="h-[300px]">
           {!isLoading && trendData && (
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <LineChart 
+                data={trendData}
+                style={{ transform: 'rotateX(10deg) rotateY(5deg)' }}
+              >
+                <defs>
+                  <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0.2}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  stroke="rgba(255,255,255,0.1)"
+                  vertical={true}
+                />
                 <XAxis 
                   dataKey="month"
                   tick={{ fill: 'rgba(255,255,255,0.8)' }}
                   stroke="rgba(255,255,255,0.2)"
+                  axisLine={{ strokeWidth: 2 }}
                 />
                 <YAxis 
                   tick={{ fill: 'rgba(255,255,255,0.8)' }}
                   stroke="rgba(255,255,255,0.2)"
                   tickFormatter={(value) => `$${value}`}
+                  axisLine={{ strokeWidth: 2 }}
                 />
                 <Tooltip 
                   formatter={(value: number) => [`$${value}`, 'Spending']}
@@ -80,8 +95,9 @@ export const SpendingTrends = () => {
                   type="monotone" 
                   dataKey="amount" 
                   stroke="#8884d8" 
-                  strokeWidth={2}
-                  dot={{ fill: '#8884d8' }}
+                  strokeWidth={3}
+                  dot={{ fill: '#8884d8', strokeWidth: 2 }}
+                  fill="url(#colorAmount)"
                 />
               </LineChart>
             </ResponsiveContainer>
