@@ -32,23 +32,29 @@ export const SubscriptionsTab = () => {
     enabled: !!session?.user?.id,
   });
 
-  const { data: currentPlan } = useQuery({
-    queryKey: ['subscriptionPlan', session?.user?.id],
+  const { data: subscriptionPlans } = useQuery({
+    queryKey: ['subscriptionPlans', session?.user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('subscription_plans')
-        .select('*')
-        .single();
+        .select('*');
       if (error) throw error;
       
-      // Parse the features JSON into an array of strings
-      return {
-        ...data,
-        features: Array.isArray(data.features) ? data.features : []
-      } as SubscriptionPlan;
+      // Parse the features JSON into an array of strings for each plan
+      return data.map((plan) => ({
+        ...plan,
+        features: Array.isArray(plan.features) ? plan.features : []
+      })) as SubscriptionPlan[];
     },
     enabled: !!session?.user?.id,
   });
+
+  // Use the first plan as current plan or fallback to a default
+  const currentPlan = subscriptionPlans?.[0] || {
+    name: 'Basic',
+    description: 'Free tier',
+    features: []
+  };
 
   return (
     <div className="space-y-6">
