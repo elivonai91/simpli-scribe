@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Scale } from "lucide-react";
+import { Scale, ExternalLink } from "lucide-react";
 import { PartnerService } from '@/types/subscription';
 
 interface SubscriptionCardProps {
@@ -22,6 +22,13 @@ export const SubscriptionCard = ({
   const handleImageError = () => {
     console.error(`Failed to load image for ${subscription.service_name}`);
     setImageError(true);
+  };
+
+  const handleTryNow = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Construct a search-friendly URL from the service name
+    const searchQuery = encodeURIComponent(`${subscription.service_name} free trial signup`);
+    window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
   };
 
   return (
@@ -127,24 +134,34 @@ export const SubscriptionCard = ({
                   </div>
                 </div>
 
-                {onCompare && (
+                <div className="flex flex-col gap-2">
                   <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onCompare(subscription);
-                    }}
-                    className={`
-                      w-full mt-4
-                      ${isSelected 
-                        ? 'bg-[#ff3da6] hover:bg-[#ff3da6]/90' 
-                        : 'bg-white/10 hover:bg-white/20'
-                      }
-                    `}
+                    onClick={handleTryNow}
+                    className="w-full bg-[#ff3da6] hover:bg-[#ff3da6]/90"
                   >
-                    <Scale className="w-4 h-4 mr-2" />
-                    {isSelected ? 'Remove from Compare' : 'Add to Compare'}
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Try Now
                   </Button>
-                )}
+
+                  {onCompare && (
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCompare(subscription);
+                      }}
+                      className={`
+                        w-full
+                        ${isSelected 
+                          ? 'bg-[#ff3da6] hover:bg-[#ff3da6]/90' 
+                          : 'bg-white/10 hover:bg-white/20'
+                        }
+                      `}
+                    >
+                      <Scale className="w-4 h-4 mr-2" />
+                      {isSelected ? 'Remove from Compare' : 'Add to Compare'}
+                    </Button>
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
