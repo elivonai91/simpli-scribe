@@ -94,8 +94,11 @@ export type Database = {
           base_price: number
           category: string | null
           created_at: string | null
+          genre: string[] | null
           id: string
+          popularity_score: number | null
           premium_discount: number | null
+          release_date: string | null
           service_name: string
         }
         Insert: {
@@ -104,8 +107,11 @@ export type Database = {
           base_price: number
           category?: string | null
           created_at?: string | null
+          genre?: string[] | null
           id?: string
+          popularity_score?: number | null
           premium_discount?: number | null
+          release_date?: string | null
           service_name: string
         }
         Update: {
@@ -114,8 +120,11 @@ export type Database = {
           base_price?: number
           category?: string | null
           created_at?: string | null
+          genre?: string[] | null
           id?: string
+          popularity_score?: number | null
           premium_discount?: number | null
+          release_date?: string | null
           service_name?: string
         }
         Relationships: []
