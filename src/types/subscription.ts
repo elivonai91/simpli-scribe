@@ -1,12 +1,15 @@
 export interface PartnerService {
   id: string;
   service_name: string;
-  category: string;
+  category: string | null;
   base_price: number;
-  premium_discount: number;
-  affiliate_rate: number;
-  api_integration: boolean;
+  premium_discount: number | null;
+  affiliate_rate: number | null;
+  api_integration: boolean | null;
   created_at: string;
+  release_date: string | null;
+  popularity_score: number | null;
+  genre: string[] | null;
 }
 
 export interface Subscription {
