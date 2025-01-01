@@ -30,7 +30,7 @@ const Features = () => {
           yearly: `$${plan.yearly_price}/yr`,
           yearlyNote: '(2 months free!)'
         },
-        features: plan.features.map((feature: string) => ({
+        features: (plan.features as string[]).map(feature => ({
           name: feature,
           included: true
         }))
