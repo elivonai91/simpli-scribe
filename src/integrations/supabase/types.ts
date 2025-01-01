@@ -321,6 +321,44 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_recommendations: {
+        Row: {
+          created_at: string
+          id: string
+          reason: Json | null
+          score: number
+          service_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason?: Json | null
+          score: number
+          service_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: Json | null
+          score?: number
+          service_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_recommendations_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "partner_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       usage_analytics: {
         Row: {
           action_details: Json | null

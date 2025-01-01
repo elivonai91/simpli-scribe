@@ -2,13 +2,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Rocket, TrendingUp, Trophy } from 'lucide-react';
+import { Rocket, TrendingUp, Trophy, Sparkles } from 'lucide-react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { SearchBar } from '@/components/SearchBar';
 import { CategoryCarousel } from '@/components/discovery/CategoryCarousel';
+import { useRecommendations } from '@/hooks/useRecommendations';
+import { Button } from '@/components/ui/button';
 
 const Discovery = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
+  const { recommendations, isLoading: isLoadingRecommendations, generateRecommendations, isGenerating } = useRecommendations();
 
   const { data: allSubscriptions, isLoading } = useQuery({
     queryKey: ['all-subscriptions'],
@@ -55,7 +58,16 @@ const Discovery = () => {
     ) || [];
   };
 
-  if (isLoading) {
+  const getRecommendedServices = () => {
+    if (!recommendations) return [];
+    return recommendations.map(rec => ({
+      ...rec.partner_services,
+      score: rec.score,
+      reason: rec.reason
+    }));
+  };
+
+  if (isLoading || isLoadingRecommendations) {
     return <div className="flex items-center justify-center h-screen bg-charcoal-900">
       <div className="text-[#ff3da6]">Loading...</div>
     </div>;
@@ -77,11 +89,32 @@ const Discovery = () => {
                 Discovery
               </h1>
               <p className="text-[#662d91]/70">Find your next perfect subscription match</p>
-              <SearchBar />
+              <div className="flex items-center gap-4">
+                <SearchBar />
+                <Button
+                  onClick={() => generateRecommendations()}
+                  disabled={isGenerating}
+                  className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Refresh Recommendations
+                </Button>
+              </div>
             </div>
           </motion.div>
 
           <section className="space-y-8">
+            <CategoryCarousel
+              title={
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#ff3da6]" />
+                  <span className="text-[#ff3da6]">Recommended for You</span>
+                </div>
+              }
+              subscriptions={getRecommendedServices()}
+              onSeeAll={() => console.log('See all recommendations')}
+            />
+
             <CategoryCarousel
               title={
                 <div className="flex items-center gap-2">
