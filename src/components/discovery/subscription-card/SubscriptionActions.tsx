@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Scale, ExternalLink } from "lucide-react";
+import { Scale, ExternalLink, MessageSquare } from "lucide-react";
 import { PartnerService } from '@/types/subscription';
+import { FeedbackDialog } from './FeedbackDialog';
 
 interface SubscriptionActionsProps {
   subscription: PartnerService;
@@ -10,6 +11,8 @@ interface SubscriptionActionsProps {
 }
 
 export const SubscriptionActions = ({ subscription, onCompare, isSelected }: SubscriptionActionsProps) => {
+  const [showFeedback, setShowFeedback] = useState(false);
+
   const handleTryNow = (e: React.MouseEvent) => {
     e.stopPropagation();
     const searchQuery = encodeURIComponent(`${subscription.service_name} free trial signup`);
@@ -44,6 +47,23 @@ export const SubscriptionActions = ({ subscription, onCompare, isSelected }: Sub
           {isSelected ? 'Remove from Compare' : 'Add to Compare'}
         </Button>
       )}
+
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowFeedback(true);
+        }}
+        className="w-full bg-white/10 hover:bg-white/20"
+      >
+        <MessageSquare className="w-4 h-4 mr-2" />
+        Rate Recommendation
+      </Button>
+
+      <FeedbackDialog
+        subscription={subscription}
+        isOpen={showFeedback}
+        onClose={() => setShowFeedback(false)}
+      />
     </div>
   );
 };
