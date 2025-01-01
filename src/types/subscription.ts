@@ -11,3 +11,13 @@ export interface Subscription {
     twentyFourHour: boolean;
   };
 }
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  description: string;
+  features: string[];
+  monthly_price: number;
+  yearly_price: number;
+  created_at?: string;
+}
