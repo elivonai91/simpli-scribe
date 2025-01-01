@@ -22,7 +22,7 @@ interface SubscriptionCardProps {
 export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
   const handleShare = async (platform: string) => {
     const url = window.location.href;
-    const text = `Check out ${subscription.service_name} subscription service!`;
+    const text = `Check out ${subscription.name} subscription service!`;
     
     switch (platform) {
       case 'twitter':
