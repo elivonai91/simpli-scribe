@@ -39,13 +39,14 @@ export const SubscriptionsHeader = ({ subscriptionCount }: SubscriptionsHeaderPr
       if (data.subscriptions?.length > 0) {
         // Add detected subscriptions to the database
         for (const sub of data.subscriptions) {
+          const nextBillingDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
           await supabase.from('user_subscriptions').insert({
             user_id: session.user.id,
             service_name: sub.name,
             billing_amount: sub.cost,
             billing_cycle: sub.billingCycle,
             service_category: sub.category,
-            next_billing_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+            next_billing_date: nextBillingDate.toISOString().split('T')[0], // Convert to YYYY-MM-DD format
             status: 'active'
           });
         }
