@@ -9,13 +9,13 @@ const Subscriptions = () => {
   const [activeTab] = React.useState('subscriptions');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 to-charcoal-800 relative overflow-x-hidden">
+    <div className="flex min-h-screen bg-gradient-to-br from-charcoal-900 to-charcoal-800">
       {/* Ambient light effect */}
       <div className="fixed top-0 right-0 w-1/2 h-screen bg-gradient-to-l from-purple-500/5 to-transparent pointer-events-none" />
       
       <Sidebar activeTab={activeTab} setActiveTab={() => {}} />
 
-      <div className="ml-72">
+      <div className="flex-1 ml-72">
         {/* Floating Header */}
         <motion.div 
           className="fixed top-0 right-0 left-72 z-50 h-16 px-8 flex items-center"
@@ -31,11 +31,10 @@ const Subscriptions = () => {
         </motion.div>
 
         {/* Main Content */}
-        <div className="px-8 mt-16">
+        <div className="p-8 mt-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
           >
             <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-6">
               <h1 className="text-3xl font-bold text-white mb-4">Subscriptions</h1>
