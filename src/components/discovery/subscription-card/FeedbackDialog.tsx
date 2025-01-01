@@ -31,10 +31,19 @@ export const FeedbackDialog = ({ subscription, isOpen, onClose }: FeedbackDialog
 
     setIsSubmitting(true);
     try {
+      // Get the current user's session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) throw sessionError;
+      if (!session?.user?.id) {
+        throw new Error('User must be logged in to submit feedback');
+      }
+
       const { error } = await supabase
         .from('recommendation_feedback')
         .upsert({
           service_id: subscription.id,
+          user_id: session.user.id,
           rating,
           feedback_text: feedback || null
         });
