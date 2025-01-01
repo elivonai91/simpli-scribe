@@ -54,7 +54,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
 
               {subscription.api_integration && (
                 <div className="flex items-center gap-2 mt-3">
-                  <Star className="w-4 h-4 text-white" />
+                  <Star className="w-4 h-4 text-ruby-500" />
                   <span className="text-sm text-white/90">API Integration Available</span>
                 </div>
               )}
@@ -76,7 +76,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
               )}
               {subscription.affiliate_rate > 0 && (
                 <div className="flex items-center gap-1 mt-2 text-sm text-white/70">
-                  <Clock className="w-3 h-3" />
+                  <Clock className="w-3 h-3 text-ruby-500" />
                   <span>Limited time offer</span>
                 </div>
               )}
