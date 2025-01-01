@@ -18,18 +18,21 @@ const Index = () => {
 
   return (
     <div className="relative flex min-h-screen">
-      {/* Fixed position sidebar with a subtle background */}
-      <aside className="fixed top-0 left-0 w-72 h-screen border-r border-white/5">
+      {/* Background that extends full width */}
+      <div className="fixed inset-0 bg-gradient-to-b from-charcoal-900 to-charcoal-800">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
+      </div>
+      
+      {/* Fixed position sidebar with transparent background */}
+      <aside className="fixed top-0 left-0 w-72 h-screen z-10">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </aside>
       
       {/* Main content with padding to account for the fixed sidebar */}
       <main className="flex-1 ml-72">
-        <div className="relative min-h-screen bg-gradient-to-b from-charcoal-900 to-charcoal-800">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
+        <div className="relative min-h-screen">
           <div className="relative z-10">
             <section className="min-h-screen flex items-center justify-center px-4">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
               <motion.div 
                 className="container mx-auto text-center z-10"
                 initial={{ opacity: 0, y: 30 }}
@@ -110,27 +113,6 @@ const Index = () => {
                 </div>
               </motion.div>
             </section>
-            <section className="py-24 px-4 bg-charcoal-800/50">
-              <div className="container mx-auto">
-                <motion.h2 
-                  className="text-4xl font-bold text-center mb-16 text-white"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                >
-                  See It In Action
-                </motion.h2>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <PopularSubscriptions />
-                </motion.div>
-              </div>
-            </section>
             <section className="py-24 px-4">
               <div className="container mx-auto">
                 <motion.h2 
@@ -167,9 +149,10 @@ const Index = () => {
                 </div>
               </div>
             </section>
-            <section className="py-24 px-4 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20">
+            <section className="py-24 px-4 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
               <motion.div 
-                className="container mx-auto text-center"
+                className="container mx-auto text-center relative z-10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
