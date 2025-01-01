@@ -39,7 +39,7 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-72 h-screen flex-shrink-0 bg-black/5 backdrop-blur-md border-r border-white/10 overflow-y-auto">
+    <aside className="fixed top-0 left-0 w-72 h-screen flex-shrink-0 bg-black/10 backdrop-blur-xl border-r border-white/10 overflow-y-auto z-50">
       <SidebarHeader />
       
       <nav className="mt-8 px-4">
@@ -52,6 +52,6 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
           />
         ))}
       </nav>
-    </div>
+    </aside>
   );
 };
