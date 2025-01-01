@@ -27,25 +27,31 @@ export const SubscriptionCard = ({
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className="h-[280px]"
+      initial={{ scale: 1 }}
+      whileHover={{ 
+        scale: 1.05,
+        zIndex: 20,
+        transition: { duration: 0.2 }
+      }}
+      className="min-h-[280px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Card className={`
         group h-full relative overflow-hidden 
         bg-gradient-to-br from-[#662d91]/75 via-[#bf0bad]/75 to-[#ff3da6]/75 
-        border-white/10 hover:border-white/20 transition-all
+        border-white/10 hover:border-white/20 transition-all duration-300
         ${isSelected ? 'ring-2 ring-[#ff3da6]' : ''}
+        ${isHovered ? 'shadow-2xl shadow-purple-500/20' : ''}
       `}>
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 backdrop-blur-[1px]" />
         <CardContent className="relative p-6 h-full flex flex-col items-center">
           <motion.div
             animate={{
-              scale: isHovered ? 0.8 : 1,
-              opacity: isHovered ? 0.7 : 1
+              scale: isHovered ? 0.85 : 1,
+              opacity: isHovered ? 0.7 : 1,
+              y: isHovered ? -20 : 0
             }}
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center"
@@ -71,12 +77,17 @@ export const SubscriptionCard = ({
           <AnimatePresence>
             {isHovered && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
                 className="absolute inset-0 p-6 bg-gradient-to-b from-black/98 to-black/99 flex flex-col justify-between"
+                style={{
+                  minHeight: '100%',
+                  height: 'auto'
+                }}
               >
-                <div>
+                <div className="space-y-4">
                   <h3 className="text-xl font-bold text-white mb-2">{subscription.service_name}</h3>
                   {subscription.genre && subscription.genre.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
