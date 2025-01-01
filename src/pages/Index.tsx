@@ -19,9 +19,8 @@ const Index = () => {
   const headerOpacity = useTransform(scrollY, [0, 100], [0.8, 0.95]);
 
   return (
-    <div className="flex h-screen w-full bg-gradient-to-br from-charcoal-900 to-charcoal-800 overflow-hidden">
+    <div className="flex h-screen w-full bg-charcoal-900 overflow-hidden">
       <SubscriptionProvider>
-        {/* Sidebar */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* Main Content */}

@@ -56,13 +56,13 @@ const Discovery = () => {
   };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">
+    return <div className="flex items-center justify-center h-screen bg-charcoal-900">
       <div className="text-[#ff3da6]">Loading...</div>
     </div>;
   }
 
   return (
-    <div className="flex h-screen w-full bg-gradient-to-br from-charcoal-900 to-charcoal-800">
+    <div className="flex h-screen w-full bg-charcoal-900">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <div className="flex-1 overflow-y-auto">

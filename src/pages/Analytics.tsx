@@ -9,7 +9,7 @@ const Analytics = () => {
   const [activeTab] = React.useState('analytics');
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-charcoal-900 to-charcoal-800">
+    <div className="flex h-screen bg-charcoal-900">
       <Sidebar activeTab={activeTab} setActiveTab={() => {}} />
 
       <div className="flex-1 flex flex-col min-h-screen">
