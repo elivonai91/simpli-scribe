@@ -33,20 +33,18 @@ export const SubscriptionsTab = () => {
   });
 
   const { data: subscriptionPlans } = useQuery({
-    queryKey: ['subscriptionPlans', session?.user?.id],
+    queryKey: ['subscriptionPlans'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('subscription_plans')
         .select('*');
       if (error) throw error;
       
-      // Parse the features JSON into an array of strings for each plan
       return data.map((plan) => ({
         ...plan,
         features: Array.isArray(plan.features) ? plan.features : []
       })) as SubscriptionPlan[];
     },
-    enabled: !!session?.user?.id,
   });
 
   // Use the first plan as current plan or fallback to a default
@@ -74,7 +72,7 @@ export const SubscriptionsTab = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-bold text-white">{currentPlan?.name || 'Basic'}</h3>
+                <h3 className="text-2xl font-bold text-white">{currentPlan?.name}</h3>
                 <p className="text-white/70">{currentPlan?.description}</p>
               </div>
               <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
