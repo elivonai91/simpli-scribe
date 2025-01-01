@@ -1,26 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { Search, Filter, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@supabase/auth-helpers-react';
 import debounce from 'lodash/debounce';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+import { FilterState, SearchBarProps } from '@/types/search';
+import { SearchFilters } from './search/SearchFilters';
+import { SearchSuggestions } from './search/SearchSuggestions';
 
-interface FilterState {
-  category: string;
-  priceRange: [number, number];
-  popularity: string;
-}
-
-export const SearchBar = () => {
+export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -31,22 +20,6 @@ export const SearchBar = () => {
   });
   const { toast } = useToast();
   const session = useSession();
-
-  const categories = [
-    { id: 'all', label: 'All Categories' },
-    { id: 'productivity', label: 'Productivity' },
-    { id: 'entertainment', label: 'Entertainment' },
-    { id: 'development', label: 'Development' },
-    { id: 'design', label: 'Design' },
-    { id: 'business', label: 'Business' },
-  ];
-
-  const popularityOptions = [
-    { id: 'all', label: 'All' },
-    { id: 'high', label: 'High' },
-    { id: 'medium', label: 'Medium' },
-    { id: 'low', label: 'Low' },
-  ];
 
   const fetchAISuggestions = useCallback(
     debounce(async (query: string) => {
@@ -60,10 +33,11 @@ export const SearchBar = () => {
         if (error) throw error;
 
         if (session?.user) {
+          const filtersJson = filters as unknown as Json;
           await supabase.from('search_history').insert({
             user_id: session.user.id,
             query,
-            filters: filters,
+            filters: filtersJson,
           });
         }
 
@@ -88,10 +62,13 @@ export const SearchBar = () => {
     const query = e.target.value;
     setSearchQuery(query);
     fetchAISuggestions(query);
+    onSearch?.(query, filters);
   };
 
   const handleFilterChange = (key: keyof FilterState, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    onSearch?.(searchQuery, newFilters);
   };
 
   return (
@@ -117,88 +94,13 @@ export const SearchBar = () => {
       </div>
 
       {showFilters && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 p-6 backdrop-blur-xl bg-white/10 rounded-xl border border-white/10"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm text-white/70">Category</label>
-              <Select
-                value={filters.category}
-                onValueChange={(value) => handleFilterChange('category', value)}
-              >
-                <SelectTrigger className="bg-white/10 border-white/10 text-white">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-white/70">Price Range</label>
-              <div className="pt-4">
-                <Slider
-                  value={filters.priceRange}
-                  min={0}
-                  max={1000}
-                  step={10}
-                  onValueChange={(value) => handleFilterChange('priceRange', value)}
-                  className="w-full"
-                />
-                <div className="flex justify-between mt-2 text-sm text-white/70">
-                  <span>${filters.priceRange[0]}</span>
-                  <span>${filters.priceRange[1]}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-white/70">Popularity</label>
-              <Select
-                value={filters.popularity}
-                onValueChange={(value) => handleFilterChange('popularity', value)}
-              >
-                <SelectTrigger className="bg-white/10 border-white/10 text-white">
-                  <SelectValue placeholder="Select popularity" />
-                </SelectTrigger>
-                <SelectContent>
-                  {popularityOptions.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </motion.div>
+        <SearchFilters filters={filters} onFilterChange={handleFilterChange} />
       )}
 
-      {suggestions.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute z-10 w-full mt-2 p-2 backdrop-blur-xl bg-white/10 rounded-xl border border-white/10"
-        >
-          {suggestions.map((suggestion, index) => (
-            <button
-              key={index}
-              className="w-full text-left px-4 py-2 text-white/70 hover:bg-white/10 rounded-lg"
-              onClick={() => setSearchQuery(suggestion)}
-            >
-              {suggestion}
-            </button>
-          ))}
-        </motion.div>
-      )}
+      <SearchSuggestions 
+        suggestions={suggestions} 
+        onSelect={setSearchQuery} 
+      />
     </div>
   );
 };
