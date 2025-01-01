@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@supabase/auth-helpers-react';
 import { motion } from 'framer-motion';
-import { CreditCard, Package, Sparkles } from 'lucide-react';
+import { CreditCard, Package, Sparkles, Plus } from 'lucide-react';
 import { Button } from '../ui/button';
 import { toast } from '@/hooks/use-toast';
 
@@ -130,10 +130,21 @@ export const SubscriptionsTab = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-white">
-                {userSubscriptions?.length || 0}
-              </div>
-              <p className="text-white/70">Total active subscriptions</p>
+              {userSubscriptions?.length === 0 ? (
+                <div className="text-center py-4">
+                  <p className="text-white/70 mb-4">No active subscriptions yet</p>
+                  <Button className="bg-purple-500 hover:bg-purple-600">
+                    <Plus className="w-4 h-4 mr-2" /> Add Subscription
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="text-3xl font-bold text-white">
+                    {userSubscriptions?.length || 0}
+                  </div>
+                  <p className="text-white/70">Total active subscriptions</p>
+                </>
+              )}
             </CardContent>
           </Card>
         </motion.div>
