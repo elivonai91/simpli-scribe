@@ -7,14 +7,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, Sparkles, Tag } from 'lucide-react';
 
-interface SubscriptionRecommendation {
+interface PartnerService {
   id: string;
-  name: string;
-  description: string;
+  service_name: string;
   category: string;
-  price: number;
-  popularity: number;
-  logo_path?: string;
+  base_price: number;
+  premium_discount: number;
+  affiliate_rate: number;
+  api_integration: boolean;
+  created_at: string;
 }
 
 const Discovery = () => {
@@ -45,7 +46,7 @@ const Discovery = () => {
     }
   });
 
-  const SubscriptionCard = ({ subscription }: { subscription: SubscriptionRecommendation }) => (
+  const SubscriptionCard = ({ subscription }: { subscription: PartnerService }) => (
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -54,9 +55,8 @@ const Discovery = () => {
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">{subscription.name}</h3>
-              <p className="text-sm text-white/70 mb-4">{subscription.description}</p>
-              <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-white mb-2">{subscription.service_name}</h3>
+              <div className="flex items-center gap-2 mt-4">
                 <Tag className="w-4 h-4 text-ruby-500" />
                 <span className="text-sm text-white/60">{subscription.category}</span>
               </div>
@@ -66,6 +66,11 @@ const Discovery = () => {
                 ${subscription.base_price}
                 <span className="text-sm text-white/60">/mo</span>
               </div>
+              {subscription.premium_discount > 0 && (
+                <div className="text-sm text-emerald-500">
+                  {subscription.premium_discount}% Premium discount
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
