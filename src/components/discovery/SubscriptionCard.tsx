@@ -19,9 +19,9 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
       whileTap={{ scale: 0.98 }}
       className="h-[280px]"
     >
-      <Card className="group h-full relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-[#662d91]/20 via-[#bf0bad]/20 to-[#ff3da6]/20 border-white/10 hover:border-white/20 transition-all">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#662d91]/30 via-[#bf0bad]/30 to-[#ff3da6]/30 opacity-50" />
-        <div className="absolute inset-0 backdrop-blur-[2px] bg-white/5" />
+      <Card className="group h-full relative overflow-hidden bg-gradient-to-br from-[#662d91] via-[#bf0bad] to-[#ff3da6] border-white/10 hover:border-white/20 transition-all">
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 backdrop-blur-[1px]" />
         <CardContent className="relative p-6 h-full overflow-hidden group-hover:overflow-auto transition-all">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -30,12 +30,12 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                   {subscription.service_name}
                 </h3>
                 {isNewRelease && (
-                  <span className="px-2 py-1 text-xs font-medium bg-[#ff3da6]/20 text-white rounded-full border border-[#ff3da6]/20">
+                  <span className="px-2 py-1 text-xs font-medium bg-black/20 text-white rounded-full border border-white/20">
                     New
                   </span>
                 )}
                 {isPopular && (
-                  <span className="px-2 py-1 text-xs font-medium bg-[#bf0bad]/20 text-white rounded-full border border-[#bf0bad]/20">
+                  <span className="px-2 py-1 text-xs font-medium bg-black/20 text-white rounded-full border border-white/20">
                     Popular
                   </span>
                 )}
@@ -45,7 +45,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                 {subscription.genre?.map((g) => (
                   <span
                     key={g}
-                    className="px-2 py-1 text-xs rounded-full bg-[#662d91]/20 text-white border border-[#662d91]/20"
+                    className="px-2 py-1 text-xs rounded-full bg-black/20 text-white border border-white/20"
                   >
                     {g}
                   </span>
