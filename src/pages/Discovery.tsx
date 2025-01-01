@@ -2,73 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, Sparkles, Rocket, Trophy, Filter } from 'lucide-react';
-import { SubscriptionGrid } from '@/components/discovery/SubscriptionGrid';
+import { Rocket, TrendingUp, Trophy } from 'lucide-react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { SearchBar } from '@/components/SearchBar';
+import { CategoryCarousel } from '@/components/discovery/CategoryCarousel';
 
 const Discovery = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
-  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
 
-  const { data: newReleases, isLoading: newReleasesLoading } = useQuery({
-    queryKey: ['new-releases'],
+  const { data: allSubscriptions, isLoading } = useQuery({
+    queryKey: ['all-subscriptions'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('partner_services')
-        .select('*')
-        .order('release_date', { ascending: false })
-        .limit(6);
+        .select('*');
 
       if (error) throw error;
       return data;
     }
-  });
-
-  const { data: trendingSubscriptions, isLoading: trendingLoading } = useQuery({
-    queryKey: ['trending-subscriptions'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('partner_services')
-        .select('*')
-        .order('affiliate_rate', { ascending: false })
-        .limit(6);
-
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  const { data: popularSubscriptions, isLoading: popularLoading } = useQuery({
-    queryKey: ['popular-subscriptions'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('partner_services')
-        .select('*')
-        .order('popularity_score', { ascending: false })
-        .limit(6);
-
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  const { data: categorySubscriptions, isLoading: categoryLoading } = useQuery({
-    queryKey: ['category-subscriptions', selectedCategory],
-    queryFn: async () => {
-      if (!selectedCategory) return [];
-      
-      const { data, error } = await supabase
-        .from('partner_services')
-        .select('*')
-        .contains('genre', [selectedCategory])
-        .limit(12);
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!selectedCategory
   });
 
   const categories = [
@@ -79,6 +30,36 @@ const Discovery = () => {
     'Development',
     'Professional'
   ];
+
+  const getSubscriptionsByCategory = (category: string) => {
+    return allSubscriptions?.filter(sub => 
+      sub.genre?.includes(category)
+    ) || [];
+  };
+
+  const getNewReleases = () => {
+    return allSubscriptions?.sort((a, b) => 
+      new Date(b.release_date || '').getTime() - new Date(a.release_date || '').getTime()
+    ) || [];
+  };
+
+  const getTrendingSubscriptions = () => {
+    return allSubscriptions?.sort((a, b) => 
+      (b.affiliate_rate || 0) - (a.affiliate_rate || 0)
+    ) || [];
+  };
+
+  const getPopularSubscriptions = () => {
+    return allSubscriptions?.sort((a, b) => 
+      (b.popularity_score || 0) - (a.popularity_score || 0)
+    ) || [];
+  };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">
+      <div className="text-white">Loading...</div>
+    </div>;
+  }
 
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-charcoal-900 to-charcoal-800">
@@ -98,79 +79,51 @@ const Discovery = () => {
               </div>
               <SearchBar />
             </div>
-
-            <div className="flex flex-wrap gap-3 mb-8">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-xl transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-white/20 text-white'
-                      : 'bg-white/10 text-white/70 hover:bg-white/15'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
           </motion.div>
 
-          {!selectedCategory ? (
-            <>
-              <section className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <Rocket className="w-5 h-5 text-ruby-500" />
-                  <h2 className="text-xl font-semibold text-white">New Releases</h2>
-                </div>
-                <SubscriptionGrid 
-                  subscriptions={newReleases} 
-                  isLoading={newReleasesLoading} 
-                />
-              </section>
-
-              <section className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <TrendingUp className="w-5 h-5 text-emerald-500" />
-                  <h2 className="text-xl font-semibold text-white">Trending Now</h2>
-                </div>
-                <SubscriptionGrid 
-                  subscriptions={trendingSubscriptions} 
-                  isLoading={trendingLoading} 
-                />
-              </section>
-
-              <section className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <Trophy className="w-5 h-5 text-amber-500" />
-                  <h2 className="text-xl font-semibold text-white">Most Popular</h2>
-                </div>
-                <SubscriptionGrid 
-                  subscriptions={popularSubscriptions} 
-                  isLoading={popularLoading} 
-                />
-              </section>
-            </>
-          ) : (
-            <section>
-              <div className="flex items-center justify-between mb-6">
+          <section className="space-y-8">
+            <CategoryCarousel
+              title={
                 <div className="flex items-center gap-2">
-                  <Filter className="w-5 h-5 text-white/70" />
-                  <h2 className="text-xl font-semibold text-white">{selectedCategory}</h2>
+                  <Rocket className="w-5 h-5 text-ruby-500" />
+                  <span>New Releases</span>
                 </div>
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="text-white/70 hover:text-white"
-                >
-                  Clear Filter
-                </button>
-              </div>
-              <SubscriptionGrid 
-                subscriptions={categorySubscriptions} 
-                isLoading={categoryLoading} 
+              }
+              subscriptions={getNewReleases()}
+              onSeeAll={() => console.log('See all new releases')}
+            />
+
+            <CategoryCarousel
+              title={
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-emerald-500" />
+                  <span>Trending Now</span>
+                </div>
+              }
+              subscriptions={getTrendingSubscriptions()}
+              onSeeAll={() => console.log('See all trending')}
+            />
+
+            <CategoryCarousel
+              title={
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-amber-500" />
+                  <span>Most Popular</span>
+                </div>
+              }
+              subscriptions={getPopularSubscriptions()}
+              onSeeAll={() => console.log('See all popular')}
+            />
+
+            {categories.map((category) => (
+              <CategoryCarousel
+                key={category}
+                title={category}
+                subscriptions={getSubscriptionsByCategory(category)}
+                onSeeAll={() => console.log(`See all ${category}`)}
               />
-            </section>
-          )}
+            ))}
+          </section>
         </div>
       </div>
     </div>
