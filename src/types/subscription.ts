@@ -1,24 +1,10 @@
-export interface Subscription {
+export interface PartnerService {
   id: string;
-  name: string;
-  cost: number;
-  billingCycle: 'monthly' | 'yearly';
-  nextBillingDate: Date;
+  service_name: string;
   category: string;
-  notes?: string;
-  reminders: {
-    fortyEightHour: boolean;
-    twentyFourHour: boolean;
-  };
-  plans?: SubscriptionPlan[];
-}
-
-export interface SubscriptionPlan {
-  id: string;
-  name: string;
-  description: string;
-  features: string[];
-  monthly_price: number;
-  yearly_price: number;
-  created_at?: string;
+  base_price: number;
+  premium_discount: number;
+  affiliate_rate: number;
+  api_integration: boolean;
+  created_at: string;
 }

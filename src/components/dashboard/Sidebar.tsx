@@ -16,12 +16,12 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
 
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: PieChart, path: '/' },
-    { id: 'account', label: 'Account', icon: User, path: '/account' },
+    { id: 'discovery', label: 'Discovery', icon: Search, path: '/discovery' },
     { id: 'analytics', label: 'Analytics', icon: BarChart, path: '/analytics' },
+    { id: 'account', label: 'Account', icon: User, path: '/account' },
     { id: 'subscriptions', label: 'Subscriptions', icon: CreditCard, path: '/subscriptions' },
     { id: 'features', label: 'Features', icon: List, path: '/features' },
     { id: 'trending', label: 'Trending Subscriptions', icon: TrendingUp, path: '/trending' },
-    { id: 'discover', label: 'Discover', icon: Search, path: '/discover' },
     { id: 'chemistry', label: 'Chemistry', icon: Atom, path: '/chemistry' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
@@ -29,7 +29,7 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   const handleNavigation = (item: typeof menuItems[0]) => {
     if (item.path === location.pathname) return;
     
-    if (!['/chemistry', '/', '/analytics', '/subscriptions'].includes(item.path)) {
+    if (!['/chemistry', '/', '/analytics', '/subscriptions', '/discovery'].includes(item.path)) {
       toast.info("This feature is coming soon!");
       return;
     }
