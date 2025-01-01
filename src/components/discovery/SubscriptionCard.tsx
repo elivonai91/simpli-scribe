@@ -53,7 +53,7 @@ export const SubscriptionCard = ({
         <CardContent className="relative p-6 h-full flex flex-col items-center">
           <motion.div
             animate={{
-              scale: isHovered ? 0.9 : 1,
+              scale: isHovered ? 0.8 : 1,
               opacity: isHovered ? 0.7 : 1,
               y: isHovered ? -15 : 0
             }}
@@ -81,17 +81,13 @@ export const SubscriptionCard = ({
           <AnimatePresence>
             {isHovered && (
               <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 30, scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="absolute inset-0 p-6 bg-gradient-to-b from-black/98 to-black/99 flex flex-col justify-between"
-                style={{
-                  minHeight: '100%',
-                  height: 'auto'
-                }}
               >
-                <div className="space-y-4 overflow-y-auto max-h-[calc(100%-60px)]">
+                <div className="space-y-4">
                   <h3 className="text-xl font-bold text-white mb-2">{subscription.service_name}</h3>
                   {subscription.genre && subscription.genre.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
