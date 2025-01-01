@@ -39,7 +39,7 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   };
 
   return (
-    <div className="w-72 h-screen flex-shrink-0 bg-charcoal-900/10 border-r border-white/5 backdrop-blur-sm bg-opacity-10">
+    <div className="w-72 h-screen flex-shrink-0 bg-black bg-opacity-10 border-r border-white/5 backdrop-blur-sm">
       <SidebarHeader />
       
       <nav className="mt-8 px-4">
