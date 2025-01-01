@@ -358,6 +358,7 @@ export type Database = {
           service_category: string | null
           service_name: string
           status: string | null
+          subscription_plan_id: string | null
           subscription_url: string | null
           user_id: string | null
         }
@@ -374,6 +375,7 @@ export type Database = {
           service_category?: string | null
           service_name: string
           status?: string | null
+          subscription_plan_id?: string | null
           subscription_url?: string | null
           user_id?: string | null
         }
@@ -390,10 +392,18 @@ export type Database = {
           service_category?: string | null
           service_name?: string
           status?: string | null
+          subscription_plan_id?: string | null
           subscription_url?: string | null
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_subscription_plan_id_fkey"
+            columns: ["subscription_plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_subscriptions_user_id_fkey"
             columns: ["user_id"]

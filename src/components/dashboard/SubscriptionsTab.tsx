@@ -52,17 +52,16 @@ export const SubscriptionsTab = () => {
         }
 
         // Transform subscription_plans data to match SubscriptionPlan type
-        const plans: SubscriptionPlan[] = Array.isArray(sub.subscription_plans) 
-          ? sub.subscription_plans.map((plan: any) => ({
-              id: plan.id,
-              name: plan.name,
-              description: plan.description || '',
-              features: Array.isArray(plan.features) ? plan.features : [],
-              monthly_price: plan.monthly_price,
-              yearly_price: plan.yearly_price,
-              created_at: plan.created_at
-            }))
-          : [];
+        const plan = sub.subscription_plans as any;
+        const subscriptionPlan: SubscriptionPlan | null = plan ? {
+          id: plan.id,
+          name: plan.name,
+          description: plan.description || '',
+          features: Array.isArray(plan.features) ? plan.features : [],
+          monthly_price: plan.monthly_price,
+          yearly_price: plan.yearly_price,
+          created_at: plan.created_at
+        } : null;
 
         return {
           id: sub.id,
@@ -71,9 +70,9 @@ export const SubscriptionsTab = () => {
           billingCycle: validBillingCycle,
           category: sub.service_category || 'Other',
           nextBillingDate: new Date(sub.next_billing_date),
-          notes: sub.notes,
+          notes: sub.notes || '',
           reminders: { fortyEightHour: false, twentyFourHour: false },
-          plans: plans
+          plans: subscriptionPlan ? [subscriptionPlan] : []
         };
       }) || [];
     },
