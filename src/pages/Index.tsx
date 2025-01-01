@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
+import { Sidebar } from '@/components/dashboard/Sidebar';
 
 const Index = () => {
+  const [activeTab, setActiveTab] = React.useState('overview');
+  
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -14,41 +17,45 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-charcoal-900 to-charcoal-800">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
-        <motion.div 
-          className="container mx-auto text-center z-10"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text">
-            Simplify Your Digital Life
-          </h1>
-          <p className="text-xl md:text-2xl text-white/70 mb-8 max-w-2xl mx-auto">
-            Track, manage, and optimize all your subscriptions in one beautiful dashboard
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90 text-white px-8"
+    <div className="flex min-h-screen">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      
+      <div className="flex-1 overflow-auto">
+        <div className="bg-gradient-to-b from-charcoal-900 to-charcoal-800">
+          {/* Hero Section */}
+          <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
+            <motion.div 
+              className="container mx-auto text-center z-10"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              Start Free Trial
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="text-white border-white/20 hover:bg-white/5"
-            >
-              Learn More
-            </Button>
-          </div>
-        </motion.div>
-      </section>
+              <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text">
+                Simplify Your Digital Life
+              </h1>
+              <p className="text-xl md:text-2xl text-white/70 mb-8 max-w-2xl mx-auto">
+                Track, manage, and optimize all your subscriptions in one beautiful dashboard
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90 text-white px-8"
+                >
+                  Start Free Trial
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="text-white border-white/20 hover:bg-white/5"
+                >
+                  Learn More
+                </Button>
+              </div>
+            </motion.div>
+          </section>
 
-      {/* Key Features */}
+          {/* Keep existing sections */}
       <section className="py-24 px-4">
         <motion.div 
           className="container mx-auto"
@@ -99,8 +106,6 @@ const Index = () => {
           </div>
         </motion.div>
       </section>
-
-      {/* Interactive Demo */}
       <section className="py-24 px-4 bg-charcoal-800/50">
         <div className="container mx-auto">
           <motion.h2 
@@ -122,8 +127,6 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* How It Works */}
       <section className="py-24 px-4">
         <div className="container mx-auto">
           <motion.h2 
@@ -160,8 +163,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Call to Action */}
       <section className="py-24 px-4 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20">
         <motion.div 
           className="container mx-auto text-center"
@@ -181,6 +182,8 @@ const Index = () => {
           </Button>
         </motion.div>
       </section>
+        </div>
+      </div>
     </div>
   );
 };
