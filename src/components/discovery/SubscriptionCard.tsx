@@ -22,25 +22,33 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
           .from('subscription_logos')
           .select('logo_path')
           .eq('service_name', subscription.service_name)
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
 
-        if (data?.logo_path) {
-          // For now, we'll use predefined colors based on service name
-          // In a real implementation, you might want to use a color extraction library
-          const colors = {
-            'Netflix': '#E50914',
-            'Spotify': '#1DB954',
-            'Disney+': '#0063E5',
-            'Amazon Prime': '#00A8E1',
-            'HBO Max': '#B535F6',
-            'Apple TV+': '#000000',
-            // Add more services as needed
-          };
+        // Predefined colors for various services
+        const colors: { [key: string]: string } = {
+          'Netflix': '#E50914',
+          'Spotify': '#1DB954',
+          'Disney+': '#0063E5',
+          'Amazon Prime': '#00A8E1',
+          'HBO Max': '#B535F6',
+          'Apple TV+': '#000000',
+          'GitHub Pro': '#2DBA4E',
+          'Asana': '#F06A6A',
+          'Xbox Game Pass': '#107C10',
+          'AWS': '#FF9900',
+          'Nintendo Switch Online': '#E60012',
+          'PlayStation Plus': '#006FCD',
+          'Adobe Creative Cloud': '#FF0000',
+          'Microsoft 365': '#00A4EF',
+          'Slack': '#4A154B',
+          'Dropbox': '#0061FF',
+          'Google Workspace': '#4285F4',
+          'Zoom': '#2D8CFF'
+        };
 
-          setAccentColor(colors[subscription.service_name] || '#9b87f5'); // Default to primary purple
-        }
+        setAccentColor(colors[subscription.service_name] || '#9b87f5');
       } catch (error) {
         console.error('Error fetching logo:', error);
         setAccentColor('#9b87f5'); // Default to primary purple on error
