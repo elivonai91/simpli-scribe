@@ -6,6 +6,15 @@ import { useSession } from '@supabase/auth-helpers-react';
 import { MonthlyOverview } from './insights/MonthlyOverview';
 import { CategoryChart } from './insights/CategoryChart';
 import { CategorySpending } from '@/types/subscription';
+import { Json } from '@/integrations/supabase/types';
+
+interface BudgetResponse {
+  id: string;
+  user_id: string;
+  monthly_limit: number;
+  created_at: string;
+  category_limits: Json;
+}
 
 interface Budget {
   monthly_limit: number;
@@ -16,7 +25,7 @@ export const SpendingInsights = () => {
   const { subscriptions } = useSubscriptions();
   const session = useSession();
 
-  const { data: budgetData } = useQuery<Budget | null>({
+  const { data: budgetData } = useQuery<Budget>({
     queryKey: ['budget'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -26,7 +35,15 @@ export const SpendingInsights = () => {
         .maybeSingle();
 
       if (error) throw error;
-      return data;
+      
+      // Transform the response data to match our Budget interface
+      const budgetResponse = data as BudgetResponse | null;
+      if (!budgetResponse) return { monthly_limit: 0, category_limits: {} };
+      
+      return {
+        monthly_limit: budgetResponse.monthly_limit,
+        category_limits: budgetResponse.category_limits as Record<string, number> || {}
+      };
     },
     enabled: !!session?.user
   });
