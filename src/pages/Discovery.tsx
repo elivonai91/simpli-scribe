@@ -57,7 +57,7 @@ const Discovery = () => {
 
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">
-      <div className="text-white">Loading...</div>
+      <div className="text-[#ff3da6]">Loading...</div>
     </div>;
   }
 
@@ -70,12 +70,19 @@ const Discovery = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-12 text-center"
           >
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col items-center justify-center gap-8">
+              <img 
+                src="/lovable-uploads/123be7c7-010f-4c2a-9e70-047a743fb055.png"
+                alt="SimpliScribed Logo"
+                className="h-16 w-auto"
+              />
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Discover Subscriptions</h1>
-                <p className="text-white/70">Find your next perfect subscription match</p>
+                <h1 className="text-5xl font-bold bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text mb-4">
+                  Discovery
+                </h1>
+                <p className="text-[#662d91]/70">Find your next perfect subscription match</p>
               </div>
               <SearchBar />
             </div>
@@ -85,8 +92,8 @@ const Discovery = () => {
             <CategoryCarousel
               title={
                 <div className="flex items-center gap-2">
-                  <Rocket className="w-5 h-5 text-ruby-500" />
-                  <span>New Releases</span>
+                  <Rocket className="w-5 h-5 text-[#ff3da6]" />
+                  <span className="text-[#ff3da6]">New Releases</span>
                 </div>
               }
               subscriptions={getNewReleases()}
@@ -96,8 +103,8 @@ const Discovery = () => {
             <CategoryCarousel
               title={
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-emerald-500" />
-                  <span>Trending Now</span>
+                  <TrendingUp className="w-5 h-5 text-[#bf0bad]" />
+                  <span className="text-[#bf0bad]">Trending Now</span>
                 </div>
               }
               subscriptions={getTrendingSubscriptions()}
@@ -107,8 +114,8 @@ const Discovery = () => {
             <CategoryCarousel
               title={
                 <div className="flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-amber-500" />
-                  <span>Most Popular</span>
+                  <Trophy className="w-5 h-5 text-[#662d91]" />
+                  <span className="text-[#662d91]">Most Popular</span>
                 </div>
               }
               subscriptions={getPopularSubscriptions()}
@@ -118,7 +125,7 @@ const Discovery = () => {
             {categories.map((category) => (
               <CategoryCarousel
                 key={category}
-                title={category}
+                title={<span className="text-[#bf0bad]">{category}</span>}
                 subscriptions={getSubscriptionsByCategory(category)}
                 onSeeAll={() => console.log(`See all ${category}`)}
               />
