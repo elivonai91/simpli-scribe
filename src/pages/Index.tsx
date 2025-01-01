@@ -17,12 +17,16 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-b from-charcoal-900 to-charcoal-800">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="relative flex min-h-screen">
+      {/* Fixed position sidebar with a solid background to ensure visibility */}
+      <aside className="fixed top-0 left-0 w-72 h-screen bg-charcoal-800 border-r border-white/10">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      </aside>
       
-      <main className="flex-1 pl-72">
-        <div className="relative min-h-screen">
-          <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900 to-charcoal-800" />
+      {/* Main content with padding to account for the fixed sidebar */}
+      <main className="flex-1 ml-72">
+        <div className="relative min-h-screen bg-gradient-to-b from-charcoal-900 to-charcoal-800">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />
           <div className="relative z-10">
             <section className="min-h-screen flex items-center justify-center px-4">
               <div className="absolute inset-0 bg-gradient-to-r from-[#662d91]/20 to-[#bf0bad]/20" />

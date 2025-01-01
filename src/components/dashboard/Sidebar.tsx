@@ -39,10 +39,10 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   };
 
   return (
-    <aside className="fixed top-0 left-0 w-72 h-screen flex-shrink-0 bg-black/10 backdrop-blur-xl border-r border-white/10 overflow-y-auto z-50">
+    <div className="h-full flex flex-col bg-charcoal-800">
       <SidebarHeader />
       
-      <nav className="mt-8 px-4">
+      <nav className="mt-8 px-4 flex-1">
         {menuItems.map((item) => (
           <SidebarMenuItem
             key={item.id}
@@ -52,6 +52,6 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
           />
         ))}
       </nav>
-    </aside>
+    </div>
   );
 };
