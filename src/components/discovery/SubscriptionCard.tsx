@@ -19,7 +19,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
       whileTap={{ scale: 0.98 }}
       className="h-[280px]"
     >
-      <Card className="group h-full relative overflow-hidden bg-gradient-to-br from-[#662d91] via-[#bf0bad] to-[#ff3da6] border-white/10 hover:border-white/20 transition-all">
+      <Card className="group h-full relative overflow-hidden bg-gradient-to-br from-[#662d91]/75 via-[#bf0bad]/75 to-[#ff3da6]/75 border-white/10 hover:border-white/20 transition-all">
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 backdrop-blur-[1px]" />
         <CardContent className="relative p-6 h-full overflow-hidden group-hover:overflow-auto transition-all">
