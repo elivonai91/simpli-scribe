@@ -4,7 +4,7 @@ export const SidebarHeader = () => {
   return (
     <div className="p-8">
       <img 
-        src="/lovable-uploads/d3b26bb3-c118-4fa1-8664-fcdc37d4e460.png" 
+        src="/lovable-uploads/123be7c7-010f-4c2a-9e70-047a743fb055.png" 
         alt="SimpliScribed Logo" 
         className="w-48 mx-auto"
       />

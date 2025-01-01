@@ -73,17 +73,10 @@ const Discovery = () => {
             className="mb-12 text-center"
           >
             <div className="flex flex-col items-center justify-center gap-8">
-              <img 
-                src="/lovable-uploads/123be7c7-010f-4c2a-9e70-047a743fb055.png"
-                alt="SimpliScribed Logo"
-                className="h-16 w-auto"
-              />
-              <div>
-                <h1 className="text-5xl font-bold bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text mb-4">
-                  Discovery
-                </h1>
-                <p className="text-[#662d91]/70">Find your next perfect subscription match</p>
-              </div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text mb-4">
+                Discovery
+              </h1>
+              <p className="text-[#662d91]/70">Find your next perfect subscription match</p>
               <SearchBar />
             </div>
           </motion.div>
