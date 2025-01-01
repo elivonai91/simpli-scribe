@@ -35,10 +35,7 @@ const Analytics = () => {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-8">
-            <h1 className="text-3xl font-bold text-white mb-6">Analytics Dashboard</h1>
-            <AnalyticsDashboard />
-          </div>
+          <AnalyticsDashboard />
         </motion.div>
       </div>
     </div>
