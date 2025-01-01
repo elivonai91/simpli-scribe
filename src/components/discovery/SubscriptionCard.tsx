@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Scale, ExternalLink } from "lucide-react";
 import { PartnerService } from '@/types/subscription';
+import { SubscriptionLogo } from './subscription-card/SubscriptionLogo';
+import { SubscriptionDetails } from './subscription-card/SubscriptionDetails';
+import { SubscriptionActions } from './subscription-card/SubscriptionActions';
 
 interface SubscriptionCardProps {
   subscription: PartnerService;
@@ -22,13 +23,6 @@ export const SubscriptionCard = ({
   const handleImageError = () => {
     console.error(`Failed to load image for ${subscription.service_name}`);
     setImageError(true);
-  };
-
-  const handleTryNow = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    // Construct a search-friendly URL from the service name
-    const searchQuery = encodeURIComponent(`${subscription.service_name} free trial signup`);
-    window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
   };
 
   return (
@@ -56,18 +50,11 @@ export const SubscriptionCard = ({
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center"
           >
-            {!imageError ? (
-              <img
-                src={`/api/subscription-logos/${subscription.service_name}`}
-                alt={`${subscription.service_name} logo`}
-                className="w-32 h-32 object-contain mb-4"
-                onError={handleImageError}
-              />
-            ) : (
-              <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-white text-4xl font-bold mb-4">
-                {subscription.service_name[0]}
-              </div>
-            )}
+            <SubscriptionLogo
+              serviceName={subscription.service_name}
+              onError={handleImageError}
+              hasError={imageError}
+            />
 
             <h3 className="text-xl font-bold text-white mb-2">{subscription.service_name}</h3>
             <div className="text-lg font-bold text-white">
@@ -104,64 +91,14 @@ export const SubscriptionCard = ({
                     </div>
                   )}
                   
-                  <div className="space-y-2">
-                    {subscription.api_integration && (
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-ruby-500" />
-                        <span className="text-sm text-white/90">API Integration Available</span>
-                      </div>
-                    )}
-                    {subscription.affiliate_rate > 0 && (
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-ruby-500" />
-                        <span className="text-sm text-white/90">Limited time offer</span>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-ruby-500" />
-                      <span className="text-sm text-white/90">
-                        Base price: ${subscription.base_price}/mo
-                      </span>
-                    </div>
-                    {subscription.premium_discount > 0 && (
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-ruby-500" />
-                        <span className="text-sm text-white/90">
-                          Premium discount: {subscription.premium_discount}%
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <SubscriptionDetails subscription={subscription} />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <Button
-                    onClick={handleTryNow}
-                    className="w-full bg-[#ff3da6] hover:bg-[#ff3da6]/90"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Try Now
-                  </Button>
-
-                  {onCompare && (
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onCompare(subscription);
-                      }}
-                      className={`
-                        w-full
-                        ${isSelected 
-                          ? 'bg-[#ff3da6] hover:bg-[#ff3da6]/90' 
-                          : 'bg-white/10 hover:bg-white/20'
-                        }
-                      `}
-                    >
-                      <Scale className="w-4 h-4 mr-2" />
-                      {isSelected ? 'Remove from Compare' : 'Add to Compare'}
-                    </Button>
-                  )}
-                </div>
+                <SubscriptionActions
+                  subscription={subscription}
+                  onCompare={onCompare}
+                  isSelected={isSelected}
+                />
               </motion.div>
             )}
           </AnimatePresence>
