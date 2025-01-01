@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce';
 import { FilterState, SearchBarProps } from '@/types/search';
 import { SearchFilters } from './search/SearchFilters';
 import { SearchSuggestions } from './search/SearchSuggestions';
+import { Json } from '@/integrations/supabase/types';
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [showFilters, setShowFilters] = useState(false);
