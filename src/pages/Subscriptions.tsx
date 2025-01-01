@@ -18,24 +18,24 @@ const Subscriptions = () => {
       <div className="ml-72">
         {/* Floating Header */}
         <motion.div 
-          className="fixed top-0 right-0 left-72 z-50 px-8 py-4"
+          className="fixed top-0 right-0 left-72 z-50 h-16 px-8 flex items-center"
           style={{
             backdropFilter: 'blur(12px)',
             backgroundColor: 'rgba(28, 28, 33, 0.8)',
           }}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between w-full">
             <NavigationMenu />
             <NotificationsIcon />
           </div>
         </motion.div>
 
-        {/* Main Content - Adjusted padding and margin */}
-        <div className="pt-20 px-8 pb-8">
+        {/* Main Content */}
+        <div className="px-8 mt-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-4"
           >
             <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-6">
               <h1 className="text-3xl font-bold text-white mb-4">Subscriptions</h1>
