@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Sparkles, Shield, BarChart3 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Sparkles, Shield, BarChart3, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -42,23 +42,22 @@ const Index = () => {
                 <h1 className="text-6xl md:text-7xl font-bold mb-10 pb-3 bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text leading-tight">
                   Simplify Your Digital Life
                 </h1>
-                <p className="text-xl md:text-2xl text-white/70 mb-8 max-w-2xl mx-auto">
+                <p className="text-xl md:text-2xl text-white/70 mb-12 max-w-2xl mx-auto">
                   Track, manage, and optimize all your subscriptions in one beautiful dashboard
                 </p>
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col items-center gap-6">
                   <Button 
                     size="lg"
-                    className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90 text-white px-8"
+                    className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90 text-white px-12"
                   >
                     Start Free Trial
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="text-white border-white/20 hover:bg-white/5"
+                  <a 
+                    href="#learn-more" 
+                    className="text-white/70 hover:text-white flex items-center gap-2 transition-colors"
                   >
-                    Learn More
-                  </Button>
+                    Learn More <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
               </motion.div>
             </section>
