@@ -15,7 +15,7 @@ const Subscriptions = () => {
       
       <Sidebar activeTab={activeTab} setActiveTab={() => {}} />
 
-      <div className="flex-1 ml-72">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Floating Header */}
         <motion.div 
           className="fixed top-0 right-0 left-72 z-50 h-16 px-8 flex items-center"
@@ -31,12 +31,13 @@ const Subscriptions = () => {
         </motion.div>
 
         {/* Main Content */}
-        <div className="p-8 mt-16">
+        <div className="flex-1 p-8 mt-16 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            className="w-full"
           >
-            <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-6">
+            <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-6 w-full">
               <h1 className="text-3xl font-bold text-white mb-4">Subscriptions</h1>
               <SubscriptionsTab />
             </div>
