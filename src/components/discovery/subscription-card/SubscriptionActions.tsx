@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Scale, ExternalLink, MessageSquare } from "lucide-react";
 import { PartnerService } from '@/types/subscription';
 import { FeedbackDialog } from './FeedbackDialog';
+import { SocialShare } from './SocialShare';
 
 interface SubscriptionActionsProps {
   subscription: PartnerService;
@@ -21,13 +22,16 @@ export const SubscriptionActions = ({ subscription, onCompare, isSelected }: Sub
 
   return (
     <div className="flex flex-col gap-2">
-      <Button
-        onClick={handleTryNow}
-        className="w-full bg-[#ff3da6] hover:bg-[#ff3da6]/90"
-      >
-        <ExternalLink className="w-4 h-4 mr-2" />
-        Try Now
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={handleTryNow}
+          className="flex-1 bg-[#ff3da6] hover:bg-[#ff3da6]/90"
+        >
+          <ExternalLink className="w-4 h-4 mr-2" />
+          Try Now
+        </Button>
+        <SocialShare subscription={subscription} />
+      </div>
 
       {onCompare && (
         <Button
