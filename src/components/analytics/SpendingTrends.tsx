@@ -56,48 +56,74 @@ export const SpendingTrends = () => {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
                 data={trendData}
-                style={{ transform: 'rotateX(10deg) rotateY(5deg)' }}
+                style={{ 
+                  transform: 'perspective(1000px) rotateX(25deg) rotateY(5deg) scale(0.9)',
+                  transformOrigin: 'center center'
+                }}
               >
                 <defs>
                   <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0.2}/>
+                    <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.9}/>
+                    <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.2}/>
+                  </linearGradient>
+                  <filter id="shadow">
+                    <feDropShadow dx="2" dy="2" stdDeviation="3" floodOpacity="0.3"/>
+                  </filter>
+                  <linearGradient id="gridGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.2)"/>
+                    <stop offset="100%" stopColor="rgba(255,255,255,0.05)"/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid 
                   strokeDasharray="3 3" 
-                  stroke="rgba(255,255,255,0.1)"
+                  stroke="url(#gridGradient)"
                   vertical={true}
+                  className="filter drop-shadow-lg"
                 />
                 <XAxis 
                   dataKey="month"
-                  tick={{ fill: 'rgba(255,255,255,0.8)' }}
-                  stroke="rgba(255,255,255,0.2)"
-                  axisLine={{ strokeWidth: 2 }}
+                  tick={{ fill: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 500 }}
+                  stroke="rgba(255,255,255,0.3)"
+                  axisLine={{ strokeWidth: 2, stroke: 'rgba(255,255,255,0.3)' }}
+                  style={{ filter: 'url(#shadow)' }}
                 />
                 <YAxis 
-                  tick={{ fill: 'rgba(255,255,255,0.8)' }}
-                  stroke="rgba(255,255,255,0.2)"
+                  tick={{ fill: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 500 }}
+                  stroke="rgba(255,255,255,0.3)"
                   tickFormatter={(value) => `$${value}`}
-                  axisLine={{ strokeWidth: 2 }}
+                  axisLine={{ strokeWidth: 2, stroke: 'rgba(255,255,255,0.3)' }}
+                  style={{ filter: 'url(#shadow)' }}
                 />
                 <Tooltip 
                   formatter={(value: number) => [`$${value}`, 'Spending']}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(8px)',
+                    backdropFilter: 'blur(12px)',
                     border: '1px solid rgba(255, 255, 255, 0.2)',
-                    borderRadius: '4px',
-                    color: 'white'
+                    borderRadius: '12px',
+                    color: 'white',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    padding: '12px'
                   }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="amount" 
-                  stroke="#8884d8" 
-                  strokeWidth={3}
-                  dot={{ fill: '#8884d8', strokeWidth: 2 }}
-                  fill="url(#colorAmount)"
+                  stroke="url(#colorAmount)"
+                  strokeWidth={4}
+                  dot={{ 
+                    fill: '#9b87f5',
+                    strokeWidth: 2,
+                    r: 6,
+                    stroke: 'rgba(255,255,255,0.5)'
+                  }}
+                  activeDot={{
+                    r: 8,
+                    stroke: 'rgba(255,255,255,0.8)',
+                    strokeWidth: 2,
+                    fill: '#9b87f5'
+                  }}
+                  style={{ filter: 'url(#shadow)' }}
                 />
               </LineChart>
             </ResponsiveContainer>
