@@ -10,6 +10,7 @@ import Index from './pages/Index';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
 import Chemistry from './pages/Chemistry';
+import Subscriptions from './pages/Subscriptions';
 import { useSession } from '@supabase/auth-helpers-react';
 import './App.css';
 
@@ -47,7 +48,7 @@ function App() {
               <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/chemistry" element={<ProtectedRoute><Chemistry /></ProtectedRoute>} />
-              <Route path="/subscriptions" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
             </Routes>
           </Router>
         </TooltipProvider>

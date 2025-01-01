@@ -3,10 +3,10 @@ import { Sidebar } from '@/components/dashboard/Sidebar';
 import { motion } from 'framer-motion';
 import { NavigationMenu } from '@/components/dashboard/NavigationMenu';
 import { NotificationsIcon } from '@/components/dashboard/NotificationsIcon';
-import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard';
+import { SubscriptionsTab } from '@/components/dashboard/SubscriptionsTab';
 
-const Analytics = () => {
-  const [activeTab] = React.useState('analytics');
+const Subscriptions = () => {
+  const [activeTab] = React.useState('subscriptions');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-charcoal-900 to-charcoal-800 relative overflow-x-hidden">
@@ -29,15 +29,15 @@ const Analytics = () => {
         </div>
       </motion.div>
 
-      <div className="ml-72 pt-24 px-8 pb-8">
+      <div className="ml-72 pt-24 px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
           <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-8">
-            <h1 className="text-3xl font-bold text-white mb-6">Analytics Dashboard</h1>
-            <AnalyticsDashboard />
+            <h1 className="text-3xl font-bold text-white mb-6">Subscriptions</h1>
+            <SubscriptionsTab />
           </div>
         </motion.div>
       </div>
@@ -45,4 +45,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default Subscriptions;
