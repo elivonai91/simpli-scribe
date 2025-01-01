@@ -29,7 +29,6 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   const handleNavigation = (item: typeof menuItems[0]) => {
     if (item.path === location.pathname) return;
     
-    // Update implemented routes to include subscriptions
     if (!['/chemistry', '/', '/analytics', '/subscriptions'].includes(item.path)) {
       toast.info("This feature is coming soon!");
       return;
@@ -40,7 +39,7 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-full w-72 bg-charcoal-900/95 border-r border-white/5">
+    <div className="w-72 h-screen flex-shrink-0 bg-charcoal-900 border-r border-white/5">
       <SidebarHeader />
       
       <nav className="mt-8 px-4">
