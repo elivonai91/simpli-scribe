@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { SubscriptionCard } from '@/components/SubscriptionCard';
 import { motion } from 'framer-motion';
+import { SubscriptionPlan } from '@/types/subscription';
 
 export const SubscriptionsTab = () => {
   const session = useSession();
@@ -21,10 +22,13 @@ export const SubscriptionsTab = () => {
         .select(`
           *,
           subscription_plans (
+            id,
             name,
+            description,
+            features,
             monthly_price,
             yearly_price,
-            features
+            created_at
           )
         `)
         .eq('user_id', session.user.id)
@@ -47,6 +51,19 @@ export const SubscriptionsTab = () => {
           validBillingCycle = sub.billing_cycle as 'monthly' | 'yearly';
         }
 
+        // Transform subscription_plans data to match SubscriptionPlan type
+        const plans: SubscriptionPlan[] = Array.isArray(sub.subscription_plans) 
+          ? sub.subscription_plans.map((plan: any) => ({
+              id: plan.id,
+              name: plan.name,
+              description: plan.description || '',
+              features: Array.isArray(plan.features) ? plan.features : [],
+              monthly_price: plan.monthly_price,
+              yearly_price: plan.yearly_price,
+              created_at: plan.created_at
+            }))
+          : [];
+
         return {
           id: sub.id,
           name: sub.service_name,
@@ -56,7 +73,7 @@ export const SubscriptionsTab = () => {
           nextBillingDate: new Date(sub.next_billing_date),
           notes: sub.notes,
           reminders: { fortyEightHour: false, twentyFourHour: false },
-          plans: sub.subscription_plans || []
+          plans: plans
         };
       }) || [];
     },
