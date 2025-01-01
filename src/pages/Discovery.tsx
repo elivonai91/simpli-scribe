@@ -8,6 +8,7 @@ import { useRecommendations } from '@/hooks/useRecommendations';
 import { PartnerService } from '@/types/subscription';
 import { DiscoveryHeader } from '@/components/discovery/DiscoveryHeader';
 import { DiscoveryContent } from '@/components/discovery/DiscoveryContent';
+import { DiscoveryChatbot } from '@/components/discovery/DiscoveryChatbot';
 
 const Discovery = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
@@ -109,6 +110,8 @@ const Discovery = () => {
           />
         </div>
       </div>
+
+      <DiscoveryChatbot />
 
       <AnimatePresence>
         {showComparison && (
