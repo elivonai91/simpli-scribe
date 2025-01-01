@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Rocket, TrendingUp, Trophy, Sparkles } from 'lucide-react';
+import { Rocket, TrendingUp, Trophy, Sparkles, Scale } from 'lucide-react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { SearchBar } from '@/components/SearchBar';
 import { CategoryCarousel } from '@/components/discovery/CategoryCarousel';
+import { SubscriptionComparison } from '@/components/discovery/SubscriptionComparison';
 import { useRecommendations } from '@/hooks/useRecommendations';
 import { Button } from '@/components/ui/button';
+import { PartnerService } from '@/types/subscription';
 
 const Discovery = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
+  const [selectedForComparison, setSelectedForComparison] = useState<PartnerService[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
+  
   const { recommendations, isLoading: isLoadingRecommendations, generateRecommendations, isGenerating } = useRecommendations();
 
   const { data: allSubscriptions, isLoading } = useQuery({
@@ -24,6 +29,14 @@ const Discovery = () => {
       return data;
     }
   });
+
+  const handleCompare = (subscription: PartnerService) => {
+    if (selectedForComparison.find(s => s.id === subscription.id)) {
+      setSelectedForComparison(current => current.filter(s => s.id !== subscription.id));
+    } else if (selectedForComparison.length < 3) {
+      setSelectedForComparison(current => [...current, subscription]);
+    }
+  };
 
   const categories = [
     'Productivity',
@@ -99,6 +112,15 @@ const Discovery = () => {
                   <Sparkles className="w-4 h-4 mr-2" />
                   Refresh Recommendations
                 </Button>
+                {selectedForComparison.length > 0 && (
+                  <Button
+                    onClick={() => setShowComparison(true)}
+                    className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90"
+                  >
+                    <Scale className="w-4 h-4 mr-2" />
+                    Compare ({selectedForComparison.length})
+                  </Button>
+                )}
               </div>
             </div>
           </motion.div>
@@ -113,6 +135,8 @@ const Discovery = () => {
               }
               subscriptions={getRecommendedServices()}
               onSeeAll={() => console.log('See all recommendations')}
+              onCompare={handleCompare}
+              selectedForComparison={selectedForComparison}
             />
 
             <CategoryCarousel
@@ -159,6 +183,18 @@ const Discovery = () => {
           </section>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showComparison && (
+          <SubscriptionComparison
+            subscriptions={selectedForComparison}
+            onClose={() => {
+              setShowComparison(false);
+              setSelectedForComparison([]);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

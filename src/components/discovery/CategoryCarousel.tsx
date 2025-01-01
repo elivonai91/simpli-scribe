@@ -12,12 +12,20 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface CategoryCarouselProps {
-  title: React.ReactNode; // Changed from string to ReactNode
+  title: React.ReactNode;
   subscriptions: PartnerService[];
   onSeeAll: () => void;
+  onCompare?: (subscription: PartnerService) => void;
+  selectedForComparison?: PartnerService[];
 }
 
-export const CategoryCarousel = ({ title, subscriptions, onSeeAll }: CategoryCarouselProps) => {
+export const CategoryCarousel = ({ 
+  title, 
+  subscriptions, 
+  onSeeAll, 
+  onCompare,
+  selectedForComparison = []
+}: CategoryCarouselProps) => {
   const displaySubscriptions = subscriptions.slice(0, 10);
 
   return (
@@ -34,7 +42,11 @@ export const CategoryCarousel = ({ title, subscriptions, onSeeAll }: CategoryCar
           <CarouselContent className="-ml-2 md:-ml-4">
             {displaySubscriptions.map((subscription) => (
               <CarouselItem key={subscription.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                <SubscriptionCard subscription={subscription} />
+                <SubscriptionCard 
+                  subscription={subscription}
+                  onCompare={onCompare}
+                  isSelected={selectedForComparison?.some(s => s.id === subscription.id)}
+                />
               </CarouselItem>
             ))}
             <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
