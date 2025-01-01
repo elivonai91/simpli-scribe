@@ -33,7 +33,9 @@ export const SubscriptionsTab = () => {
         id: sub.id,
         name: sub.service_name,
         cost: sub.billing_amount,
-        billingCycle: sub.billing_cycle || 'monthly',
+        billingCycle: (sub.billing_cycle === 'monthly' || sub.billing_cycle === 'yearly') 
+          ? sub.billing_cycle 
+          : 'monthly', // Default to monthly if invalid value
         category: sub.service_category || 'Other',
         nextBillingDate: new Date(sub.next_billing_date),
         notes: sub.notes,
