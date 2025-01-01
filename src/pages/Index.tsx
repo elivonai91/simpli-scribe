@@ -39,7 +39,7 @@ const Index = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <h1 className="text-6xl md:text-7xl font-bold mb-8 pb-2 bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text leading-tight">
+                <h1 className="text-6xl md:text-7xl font-bold mb-10 pb-3 bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text leading-tight">
                   Simplify Your Digital Life
                 </h1>
                 <p className="text-xl md:text-2xl text-white/70 mb-8 max-w-2xl mx-auto">
