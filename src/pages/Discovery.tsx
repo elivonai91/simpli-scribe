@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Rocket, TrendingUp, Trophy, Sparkles, Scale } from 'lucide-react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
-import { SearchBar } from '@/components/SearchBar';
-import { CategoryCarousel } from '@/components/discovery/CategoryCarousel';
 import { SubscriptionComparison } from '@/components/discovery/SubscriptionComparison';
 import { useRecommendations } from '@/hooks/useRecommendations';
-import { Button } from '@/components/ui/button';
 import { PartnerService } from '@/types/subscription';
+import { DiscoveryHeader } from '@/components/discovery/DiscoveryHeader';
+import { DiscoveryContent } from '@/components/discovery/DiscoveryContent';
 
 const Discovery = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
@@ -92,95 +90,23 @@ const Discovery = () => {
       
       <div className="flex-1 overflow-y-auto">
         <div className="container mx-auto px-6 py-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12 text-center"
-          >
-            <div className="flex flex-col items-center justify-center gap-8">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-[#662d91] via-[#bf0bad] to-[#ff3da6] text-transparent bg-clip-text mb-4">
-                Discovery
-              </h1>
-              <p className="text-[#662d91]/70">Find your next perfect subscription match</p>
-              <div className="flex items-center gap-4">
-                <SearchBar />
-                <Button
-                  onClick={() => generateRecommendations()}
-                  disabled={isGenerating}
-                  className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90"
-                >
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Refresh Recommendations
-                </Button>
-                {selectedForComparison.length > 0 && (
-                  <Button
-                    onClick={() => setShowComparison(true)}
-                    className="bg-gradient-to-r from-[#662d91] to-[#bf0bad] hover:from-[#662d91]/90 hover:to-[#bf0bad]/90"
-                  >
-                    <Scale className="w-4 h-4 mr-2" />
-                    Compare ({selectedForComparison.length})
-                  </Button>
-                )}
-              </div>
-            </div>
-          </motion.div>
+          <DiscoveryHeader
+            isGenerating={isGenerating}
+            generateRecommendations={generateRecommendations}
+            selectedForComparison={selectedForComparison}
+            setShowComparison={setShowComparison}
+          />
 
-          <section className="space-y-8">
-            <CategoryCarousel
-              title={
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#ff3da6]" />
-                  <span className="text-[#ff3da6]">Recommended for You</span>
-                </div>
-              }
-              subscriptions={getRecommendedServices()}
-              onSeeAll={() => console.log('See all recommendations')}
-              onCompare={handleCompare}
-              selectedForComparison={selectedForComparison}
-            />
-
-            <CategoryCarousel
-              title={
-                <div className="flex items-center gap-2">
-                  <Rocket className="w-5 h-5 text-[#ff3da6]" />
-                  <span className="text-[#ff3da6]">New Releases</span>
-                </div>
-              }
-              subscriptions={getNewReleases()}
-              onSeeAll={() => console.log('See all new releases')}
-            />
-
-            <CategoryCarousel
-              title={
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#bf0bad]" />
-                  <span className="text-[#bf0bad]">Trending Now</span>
-                </div>
-              }
-              subscriptions={getTrendingSubscriptions()}
-              onSeeAll={() => console.log('See all trending')}
-            />
-
-            <CategoryCarousel
-              title={
-                <div className="flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-[#662d91]" />
-                  <span className="text-[#662d91]">Most Popular</span>
-                </div>
-              }
-              subscriptions={getPopularSubscriptions()}
-              onSeeAll={() => console.log('See all popular')}
-            />
-
-            {categories.map((category) => (
-              <CategoryCarousel
-                key={category}
-                title={<span className="text-[#bf0bad]">{category}</span>}
-                subscriptions={getSubscriptionsByCategory(category)}
-                onSeeAll={() => console.log(`See all ${category}`)}
-              />
-            ))}
-          </section>
+          <DiscoveryContent
+            recommendedServices={getRecommendedServices()}
+            newReleases={getNewReleases()}
+            trendingSubscriptions={getTrendingSubscriptions()}
+            popularSubscriptions={getPopularSubscriptions()}
+            categories={categories}
+            getSubscriptionsByCategory={getSubscriptionsByCategory}
+            handleCompare={handleCompare}
+            selectedForComparison={selectedForComparison}
+          />
         </div>
       </div>
 
