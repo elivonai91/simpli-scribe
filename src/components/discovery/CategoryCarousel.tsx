@@ -12,7 +12,7 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface CategoryCarouselProps {
-  title: string;
+  title: React.ReactNode; // Changed from string to ReactNode
   subscriptions: PartnerService[];
   onSeeAll: () => void;
 }
