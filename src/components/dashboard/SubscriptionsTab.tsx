@@ -29,18 +29,24 @@ export const SubscriptionsTab = () => {
         throw error;
       }
       
-      return data?.map(sub => ({
-        id: sub.id,
-        name: sub.service_name,
-        cost: sub.billing_amount,
-        billingCycle: (sub.billing_cycle === 'monthly' || sub.billing_cycle === 'yearly') 
-          ? sub.billing_cycle 
-          : 'monthly', // Default to monthly if invalid value
-        category: sub.service_category || 'Other',
-        nextBillingDate: new Date(sub.next_billing_date),
-        notes: sub.notes,
-        reminders: { fortyEightHour: false, twentyFourHour: false }
-      })) || [];
+      return data?.map(sub => {
+        // Ensure billing_cycle is either 'monthly' or 'yearly'
+        let validBillingCycle: 'monthly' | 'yearly' = 'monthly';
+        if (sub.billing_cycle === 'monthly' || sub.billing_cycle === 'yearly') {
+          validBillingCycle = sub.billing_cycle as 'monthly' | 'yearly';
+        }
+
+        return {
+          id: sub.id,
+          name: sub.service_name,
+          cost: sub.billing_amount,
+          billingCycle: validBillingCycle,
+          category: sub.service_category || 'Other',
+          nextBillingDate: new Date(sub.next_billing_date),
+          notes: sub.notes,
+          reminders: { fortyEightHour: false, twentyFourHour: false }
+        };
+      }) || [];
     },
     enabled: !!session?.user?.id,
   });
