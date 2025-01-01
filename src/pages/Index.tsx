@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ExternalLink, Star } from 'lucide-react';
+import { ArrowRight, ExternalLink, Star, Sparkles, Shield, BarChart2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -138,7 +138,7 @@ const Index = () => {
                       description: "Keep all your subscription data safe and encrypted"
                     },
                     {
-                      icon: <BarChart3 className="w-8 h-8 text-[#662d91]" />,
+                      icon: <BarChart2 className="w-8 h-8 text-[#662d91]" />,
                       title: "Detailed Analytics",
                       description: "Track spending patterns and identify savings opportunities"
                     }
