@@ -5,12 +5,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@supabase/auth-helpers-react';
 import { MonthlyOverview } from './insights/MonthlyOverview';
 import { CategoryChart } from './insights/CategoryChart';
+import { CategorySpending } from '@/types/subscription';
+
+interface Budget {
+  monthly_limit: number;
+  category_limits: Record<string, number>;
+}
 
 export const SpendingInsights = () => {
   const { subscriptions } = useSubscriptions();
   const session = useSession();
 
-  const { data: budgetData } = useQuery({
+  const { data: budgetData } = useQuery<Budget | null>({
     queryKey: ['budget'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -32,7 +38,7 @@ export const SpendingInsights = () => {
     return acc;
   }, {});
 
-  const chartData = Object.entries(categorySpending).map(([category, amount]) => ({
+  const chartData: CategorySpending[] = Object.entries(categorySpending).map(([category, amount]) => ({
     category,
     spending: Number(amount.toFixed(2)),
     limit: budgetData?.category_limits?.[category] || 0
