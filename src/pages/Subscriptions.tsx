@@ -30,14 +30,15 @@ const Subscriptions = () => {
           </div>
         </motion.div>
 
-        <div className="pt-24 px-8">
+        {/* Main Content - Adjusted padding and margin */}
+        <div className="pt-20 px-8 pb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
+            className="space-y-6"
           >
-            <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Subscriptions</h1>
+            <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl p-6">
+              <h1 className="text-3xl font-bold text-white mb-4">Subscriptions</h1>
               <SubscriptionsTab />
             </div>
           </motion.div>
