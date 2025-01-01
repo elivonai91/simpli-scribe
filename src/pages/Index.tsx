@@ -1,11 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Sparkles, Shield, BarChart3, ExternalLink } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Sparkles, Shield, BarChart3, ExternalLink, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
 import { Sidebar } from '@/components/dashboard/Sidebar';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    role: "Digital Marketing Manager",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60",
+    rating: 5,
+    text: "SimpliScribed has transformed how I manage my subscriptions. The insights are invaluable!"
+  },
+  {
+    name: "Michael Chen",
+    role: "Tech Entrepreneur",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60",
+    rating: 5,
+    text: "This platform saved me hundreds on unused subscriptions. Highly recommended!"
+  },
+  {
+    name: "Emily Rodriguez",
+    role: "Content Creator",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60",
+    rating: 5,
+    text: "The analytics and recommendations are spot-on. A must-have for creators!"
+  },
+  {
+    name: "David Kim",
+    role: "Small Business Owner",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=60",
+    rating: 5,
+    text: "Incredible tool for managing business subscriptions. The interface is intuitive and powerful."
+  }
+];
 
 const Index = () => {
   const [activeTab, setActiveTab] = React.useState('overview');
@@ -14,6 +47,12 @@ const Index = () => {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.6 }
+  };
+
+  const renderStars = (rating: number) => {
+    return Array(rating).fill(0).map((_, index) => (
+      <Star key={index} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+    ));
   };
 
   return (
@@ -59,6 +98,44 @@ const Index = () => {
                     Learn More <ExternalLink className="w-4 h-4" />
                   </a>
                 </div>
+              </motion.div>
+            </section>
+
+            {/* Testimonials Section */}
+            <section className="py-24 px-4">
+              <motion.div 
+                className="container mx-auto"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl font-bold text-center mb-16 text-white">
+                  What Our Users Say
+                </h2>
+                <Carousel className="w-full max-w-4xl mx-auto">
+                  <CarouselContent>
+                    {testimonials.map((testimonial, index) => (
+                      <CarouselItem key={index}>
+                        <Card className="p-6 bg-charcoal-800/50 border border-white/5">
+                          <div className="flex flex-col items-center text-center">
+                            <Avatar className="w-20 h-20 mb-4">
+                              <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                              <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex items-center gap-1 mb-4">
+                              {renderStars(testimonial.rating)}
+                            </div>
+                            <p className="text-lg text-white/90 mb-4 italic">"{testimonial.text}"</p>
+                            <h3 className="font-semibold text-white">{testimonial.name}</h3>
+                            <p className="text-sm text-white/70">{testimonial.role}</p>
+                          </div>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0" />
+                  <CarouselNext className="right-0" />
+                </Carousel>
               </motion.div>
             </section>
 
