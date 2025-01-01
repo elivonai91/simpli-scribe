@@ -35,7 +35,7 @@ export const SubscriptionCard = ({ subscription }: SubscriptionCardProps) => {
                   </span>
                 )}
                 {isPopular && (
-                  <span className="px-2 py-1 text-xs font-medium bg-black/20 text-white rounded-full border border-white/20">
+                  <span className="px-2 py-1 text-xs font-medium bg-[#662d91] text-white rounded-full border border-white/20">
                     Popular
                   </span>
                 )}
