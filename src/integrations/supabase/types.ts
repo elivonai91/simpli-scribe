@@ -240,6 +240,36 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_detection_logs: {
+        Row: {
+          detected_subscriptions: Json | null
+          email: string
+          error: string | null
+          id: string
+          scan_date: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          detected_subscriptions?: Json | null
+          email: string
+          error?: string | null
+          id?: string
+          scan_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          detected_subscriptions?: Json | null
+          email?: string
+          error?: string | null
+          id?: string
+          scan_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       subscription_logos: {
         Row: {
           created_at: string | null
