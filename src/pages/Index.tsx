@@ -27,15 +27,22 @@ const Index = () => {
       <main className="flex-1 ml-72">
         <div className="relative min-h-screen">
           <div className="relative z-10">
+            <section className="min-h-screen flex items-center justify-center px-4">
+              <HeroSection />
+            </section>
+            
+            <KeyFeatures />
+            
             <SubscriptionProvider>
-              <section className="min-h-screen flex items-center justify-center px-4">
-                <HeroSection />
-              </section>
-              
-              <KeyFeatures />
-              
               <UpcomingPayments />
             </SubscriptionProvider>
+
+            {/* Rest of the content */}
+            <section className="py-12 px-4">
+              <div className="container mx-auto">
+                {/* Additional content sections go here */}
+              </div>
+            </section>
           </div>
         </div>
       </main>
