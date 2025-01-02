@@ -4,6 +4,7 @@ import { TopNavigation } from '@/components/dashboard/TopNavigation';
 import { HeroSection } from '@/components/dashboard/HeroSection';
 import { KeyFeatures } from '@/components/dashboard/KeyFeatures';
 import { UpcomingPayments } from '@/components/dashboard/UpcomingPayments';
+import { SubscriptionProvider } from '@/context/SubscriptionContext';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -26,13 +27,15 @@ const Index = () => {
       <main className="flex-1 ml-72">
         <div className="relative min-h-screen">
           <div className="relative z-10">
-            <section className="min-h-screen flex items-center justify-center px-4">
-              <HeroSection />
-            </section>
-            
-            <KeyFeatures />
-            
-            <UpcomingPayments />
+            <SubscriptionProvider>
+              <section className="min-h-screen flex items-center justify-center px-4">
+                <HeroSection />
+              </section>
+              
+              <KeyFeatures />
+              
+              <UpcomingPayments />
+            </SubscriptionProvider>
           </div>
         </div>
       </main>
