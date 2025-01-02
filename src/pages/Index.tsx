@@ -6,7 +6,8 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PopularSubscriptions } from '@/components/dashboard/PopularSubscriptions';
 import { Sidebar } from '@/components/dashboard/Sidebar';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { TopNavigation } from '@/components/dashboard/TopNavigation';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const testimonials = [
@@ -53,6 +54,9 @@ const Index = () => {
       <aside className="fixed top-0 left-0 w-72 h-screen z-10">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </aside>
+
+      {/* Add TopNavigation component */}
+      <TopNavigation />
       
       {/* Main content with padding to account for the fixed sidebar */}
       <main className="flex-1 ml-72">
